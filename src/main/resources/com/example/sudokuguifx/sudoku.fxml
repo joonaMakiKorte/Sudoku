@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.GridPane?>
+
+<GridPane fx:id="gridPane" xmlns:fx="http://javafx.com/fxml" fx:controller="com.example.sudokuguifx.SudokuController"
+          hgap="5" vgap="5" alignment="CENTER">
+    <!-- The GridPane for the 9x9 Sudoku grid -->
+</GridPane>
