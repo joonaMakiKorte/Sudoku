@@ -8,13 +8,19 @@ public class SudokuController {
 
     // 9x9 integer array for Sudoku grid
     private int[][] sudokuGrid = new int[9][9];
+    private TextField[][] textFields = new TextField[9][9];
+
+    private String difficulty; // The difficulty level passed from StartupController
 
     // Reference to the GridPane from the FXML file
     @FXML
     private GridPane gridPane;
 
-    // 9x9 array of TextFields
-    private TextField[][] textFields = new TextField[9][9];
+    // Set the difficulty level
+    public void setDifficulty(String difficulty) {
+        this.difficulty = difficulty;
+
+    }
 
     // Initialize the grid and attach listeners
     @FXML
