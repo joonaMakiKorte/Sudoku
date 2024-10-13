@@ -4,13 +4,12 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="f3abaf89-6b09-4d91-975e-5dc0994e528e" name="Changes" comment="Major changes. Foundations of the gui created">
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/example/sudokuguifx/StartupController.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/com/example/sudokuguifx/startup_menu.fxml" afterDir="false" />
+    <list default="true" id="f3abaf89-6b09-4d91-975e-5dc0994e528e" name="Changes" comment="Created a startup menu with difficulty selection.">
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/example/sudokuguifx/GenerateBoard.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/example/sudokuguifx/Solver.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/sudokuguifx/StartupController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/sudokuguifx/StartupController.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/example/sudokuguifx/SudokuController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/sudokuguifx/SudokuController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/sudokuguifx/SudokuGUI.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/sudokuguifx/SudokuGUI.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/com/example/sudokuguifx/sudoku.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/com/example/sudokuguifx/sudoku.fxml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -74,6 +73,9 @@
     <key name="MoveFile.RECENT_KEYS">
       <recent name="C:\Users\joona\IdeaProjects\sudokuGUIFX\src\main\resources\com\example\sudokuguifx" />
     </key>
+    <key name="MoveClassesOrPackagesDialog.RECENTS_KEY">
+      <recent name="com.example.sudokuguifx" />
+    </key>
   </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
@@ -92,11 +94,20 @@
       <option name="project" value="LOCAL" />
       <updated>1728746163177</updated>
     </task>
-    <option name="localTasksCounter" value="2" />
+    <task id="LOCAL-00002" summary="Created a startup menu with difficulty selection.">
+      <option name="closed" value="true" />
+      <created>1728822891295</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1728822891295</updated>
+    </task>
+    <option name="localTasksCounter" value="3" />
     <servers />
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="Major changes. Foundations of the gui created" />
-    <option name="LAST_COMMIT_MESSAGE" value="Major changes. Foundations of the gui created" />
+    <MESSAGE value="Created a startup menu with difficulty selection." />
+    <option name="LAST_COMMIT_MESSAGE" value="Created a startup menu with difficulty selection." />
   </component>
 </project>

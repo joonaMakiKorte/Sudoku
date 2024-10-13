@@ -32,6 +32,12 @@ public class StartupController {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("sudoku.fxml"));
             Parent root = loader.load();
 
+            // Get the controller for the Sudoku scene
+            SudokuController sudokuController = loader.getController();
+            // Pass the difficulty to the SudokuController
+            sudokuController.setDifficulty(selectedDifficulty);
+            sudokuController.initializeBoard();
+
             // Get the current stage using the button that triggered the event
             Stage stage = (Stage) startButton.getScene().getWindow();
             Scene scene = new Scene(root, 600, 600);
