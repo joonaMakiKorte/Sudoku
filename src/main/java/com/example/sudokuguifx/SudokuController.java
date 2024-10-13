@@ -3,6 +3,8 @@ package com.example.sudokuguifx;
 import javafx.fxml.FXML;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
+import javafx.scene.text.Font;
+import javafx.scene.text.FontWeight;
 
 public class SudokuController {
 
@@ -11,6 +13,7 @@ public class SudokuController {
     // Solution grid
     private int [][] solutionGrid;
 
+    private int strikesLeft;
 
     private int difficulty; // The difficulty level passed from StartupController
 
@@ -37,6 +40,8 @@ public class SudokuController {
         boardGenerator.fillValues();
         // get the final board
         sudokuGrid = boardGenerator.board;
+        solutionGrid = boardGenerator.solution;
+        strikesLeft = 3;
         populateGrid();
     }
 
@@ -49,20 +54,36 @@ public class SudokuController {
                 textField.setPrefWidth(40); // Set preferred width
                 textField.setPrefHeight(40); // Set preferred height
                 textField.setStyle("-fx-alignment: center;");
+                textField.setFont(Font.font("Verdana", FontWeight.BOLD, 15));
 
-                // Check if cell already filled -> make non-editable
+                // Check if cell is pre-filled -> make non-editable
                 if (sudokuGrid[row][col]!=0) {
                     textField.setText(String.valueOf(sudokuGrid[row][col]));
                     textField.setEditable(false);
                 } else {
+                    final int currentRow = row;
+                    final int currentCol = col;
                     // Limit input to single digit
                     textField.textProperty().addListener((observable, oldValue, newValue) -> {
                         if (newValue.matches("\\d?")) {
                             if (!newValue.isEmpty()) {
+
                                 // Update corresponding value in sudokuGrid
-                                sudokuGrid[GridPane.getRowIndex(textField)][GridPane.getColumnIndex(textField)] = Integer.parseInt(newValue);
+                                sudokuGrid[currentRow][currentCol] = Integer.parseInt(newValue);
+
+                                // Compare with the solution grid
+                                if (sudokuGrid[currentRow][currentCol] == solutionGrid[currentRow][currentCol]) {
+
+                                    // Correct value entered, make the TextField non-editable
+                                    textField.setEditable(false);
+                                    textField.setStyle("-fx-text-fill: green; -fx-alignment: center;");
+                                } else {
+                                    textField.setStyle("-fx-text-fill: red; -fx-alignment: center;");
+                                    strikesLeft--; // wrong input -> a strike
+                                }
                             } else {
-                                sudokuGrid[GridPane.getRowIndex(textField)][GridPane.getColumnIndex(textField)] = 0;
+                                sudokuGrid[currentRow][currentCol] = 0;
+                                textField.setStyle("-fx-text-fill: black; -fx-alignment: center;");
                             }
                         } else {
                             textField.setText(oldValue); // Restore old value if input is invalid

@@ -3,6 +3,7 @@ package com.example.sudokuguifx;
 public class GenerateBoard {
 
     int[][] board; //board as matrix
+    int[][] solution; //board to store solution
     int N; //number of rows/cols
     int B; //number of rows/cols of box
     int K;
@@ -13,14 +14,17 @@ public class GenerateBoard {
         this.K = K;
 
         this.board = new int[N][N];
+        this.solution = new int[N][N];
     }
 
     public void fillValues() {
 
         fillDiagonal();
         fillRemaining(0,B);
+        copyBoardToSolution();
         removeKDigits();
     }
+
 
     private void fillDiagonal() {
 
@@ -124,6 +128,14 @@ public class GenerateBoard {
             }
         }
         return false;
+    }
+
+    // Copy the filled board to the solution matrix
+    private void copyBoardToSolution() {
+        for (int i = 0; i < N; i++) {
+            // Copy each value
+            System.arraycopy(board[i], 0, solution[i], 0, N);
+        }
     }
 
     private void removeKDigits() {
