@@ -1,10 +1,16 @@
 package com.example.sudokuguifx;
 
 import javafx.fxml.FXML;
+import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
+import javafx.scene.control.Label;
+import javafx.stage.Stage;
+import javafx.util.Duration;
 
 public class SudokuController {
 
@@ -13,13 +19,31 @@ public class SudokuController {
     // Solution grid
     private int [][] solutionGrid;
 
-    private int strikesLeft;
+    private int mistakes;
 
     private int difficulty; // The difficulty level passed from StartupController
 
-    // Reference to the GridPane from the FXML file
+    private Timeline timer; // Top keep track of the timer
+    private int timeSeconds; // Track elapsed seconds
+    private boolean isTimerRunning = true; // Timer state
+
     @FXML
     private GridPane gridPane;
+
+    @FXML
+    private Label difficultyLabel;
+
+    @FXML
+    private Label timerLabel;
+
+    @FXML
+    private Label mistakesLabel;
+
+    @FXML
+    private Button pauseButton; //Pause/Resume
+
+    @FXML
+    private Button exitButton; //Exit game
 
     // Set the difficulty level
     public void setDifficulty(String difficulty) {
@@ -30,6 +54,8 @@ public class SudokuController {
             case "Hard" -> 62;
             default -> 68;
         };
+
+        difficultyLabel.setText(difficulty);
     }
 
     public void initializeBoard() {
@@ -41,8 +67,50 @@ public class SudokuController {
         // get the final board
         sudokuGrid = boardGenerator.board;
         solutionGrid = boardGenerator.solution;
-        strikesLeft = 3;
+        mistakes = 0;
         populateGrid();
+        startTimer(); // Start the timer when the game starts
+    }
+
+    // Method to start the timer
+    private void startTimer() {
+        timeSeconds = 0; // Initialize the timer to 0 seconds
+        timerLabel.setText(formatTime(timeSeconds)); // Display initial time
+
+        // Create a Timeline to update the timer every second
+        timer = new Timeline(new KeyFrame(Duration.seconds(1), event -> {
+            timeSeconds++;
+            timerLabel.setText(formatTime(timeSeconds)); // Update label text
+        }));
+
+        timer.setCycleCount(Timeline.INDEFINITE); // Run indefinitely
+        timer.play(); // Start the timer
+    }
+
+    // Helper method to format time (mm:ss)
+    private String formatTime(int totalSeconds) {
+        int minutes = totalSeconds / 60;
+        int seconds = totalSeconds % 60;
+        return String.format("%02d:%02d", minutes, seconds);
+    }
+
+    @FXML
+    private void toggleTimer() {
+        if (isTimerRunning) {
+            timer.pause();  // Pause the timer
+            pauseButton.setText("Resume");  // Update button text
+        } else {
+            timer.play();  // Resume the timer
+            pauseButton.setText("Pause");  // Update button text
+        }
+        isTimerRunning = !isTimerRunning;  // Toggle the state
+    }
+
+    @FXML
+    private void handleExit() {
+        // Get the current stage using the button (or any UI element) and close the application
+        Stage stage = (Stage) pauseButton.getScene().getWindow();
+        stage.close();
     }
 
     private void populateGrid() {
@@ -53,8 +121,8 @@ public class SudokuController {
                 TextField textField = new TextField();
                 textField.setPrefWidth(40); // Set preferred width
                 textField.setPrefHeight(40); // Set preferred height
-                textField.setStyle("-fx-alignment: center;");
                 textField.setFont(Font.font("Verdana", FontWeight.BOLD, 15));
+                textField.setStyle("-fx-alignment: center;");
 
                 // Check if cell is pre-filled -> make non-editable
                 if (sudokuGrid[row][col]!=0) {
@@ -79,7 +147,8 @@ public class SudokuController {
                                     textField.setStyle("-fx-text-fill: green; -fx-alignment: center;");
                                 } else {
                                     textField.setStyle("-fx-text-fill: red; -fx-alignment: center;");
-                                    strikesLeft--; // wrong input -> a strike
+                                    mistakes++; // wrong input -> a strike
+                                    mistakesLabel.setText("Mistakes " + mistakes + "/3");
                                 }
                             } else {
                                 sudokuGrid[currentRow][currentCol] = 0;
@@ -90,6 +159,7 @@ public class SudokuController {
                         }
                     });
                 }
+
                 // Add the TextField to the GridPane at the specified position
                 gridPane.add(textField, col, row);
             }

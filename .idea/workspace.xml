@@ -4,10 +4,11 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="f3abaf89-6b09-4d91-975e-5dc0994e528e" name="Changes" comment="Added GenerateBoard class and difficulty selection. Generates board based on difficulty.">
+    <list default="true" id="f3abaf89-6b09-4d91-975e-5dc0994e528e" name="Changes" comment="Added valid input recognition.">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/sudokuguifx/GenerateBoard.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/sudokuguifx/GenerateBoard.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/example/sudokuguifx/SudokuController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/sudokuguifx/SudokuController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/sudokuguifx/SudokuGUI.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/sudokuguifx/SudokuGUI.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/com/example/sudokuguifx/sudoku.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/com/example/sudokuguifx/sudoku.fxml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -107,13 +108,22 @@
       <option name="project" value="LOCAL" />
       <updated>1728831338003</updated>
     </task>
-    <option name="localTasksCounter" value="4" />
+    <task id="LOCAL-00004" summary="Added valid input recognition.">
+      <option name="closed" value="true" />
+      <created>1728856206056</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1728856206056</updated>
+    </task>
+    <option name="localTasksCounter" value="5" />
     <servers />
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="Major changes. Foundations of the gui created" />
     <MESSAGE value="Created a startup menu with difficulty selection." />
     <MESSAGE value="Added GenerateBoard class and difficulty selection. Generates board based on difficulty." />
-    <option name="LAST_COMMIT_MESSAGE" value="Added GenerateBoard class and difficulty selection. Generates board based on difficulty." />
+    <MESSAGE value="Added valid input recognition." />
+    <option name="LAST_COMMIT_MESSAGE" value="Added valid input recognition." />
   </component>
 </project>
