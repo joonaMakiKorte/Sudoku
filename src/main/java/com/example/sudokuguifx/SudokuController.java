@@ -1,9 +1,13 @@
 package com.example.sudokuguifx;
 
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
-import javafx.scene.layout.GridPane;
+import javafx.scene.layout.*;
+import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.animation.KeyFrame;
@@ -11,6 +15,9 @@ import javafx.animation.Timeline;
 import javafx.scene.control.Label;
 import javafx.stage.Stage;
 import javafx.util.Duration;
+
+import java.io.IOException;
+import java.util.Arrays;
 
 public class SudokuController {
 
@@ -43,13 +50,16 @@ public class SudokuController {
     private Button pauseButton; //Pause/Resume
 
     @FXML
-    private Button exitButton; //Exit game
+    private Button newGameButton;
+
+    @FXML
+    private Label pauseMessage;
 
     // Set the difficulty level
     public void setDifficulty(String difficulty) {
 
         this.difficulty = switch (difficulty) {
-            case "Easy" -> 52;
+            case "Easy" -> 48;
             case "Medium" -> 56;
             case "Hard" -> 62;
             default -> 68;
@@ -99,9 +109,13 @@ public class SudokuController {
         if (isTimerRunning) {
             timer.pause();  // Pause the timer
             pauseButton.setText("Resume");  // Update button text
+            gridPane.setVisible(false); // Hide the Sudoku grid
+            pauseMessage.setVisible(true); // Show pause message
         } else {
             timer.play();  // Resume the timer
             pauseButton.setText("Pause");  // Update button text
+            gridPane.setVisible(true); // Show the sudoku grid
+            pauseMessage.setVisible(false); // Hide pause message
         }
         isTimerRunning = !isTimerRunning;  // Toggle the state
     }
@@ -123,6 +137,16 @@ public class SudokuController {
                 textField.setPrefHeight(40); // Set preferred height
                 textField.setFont(Font.font("Verdana", FontWeight.BOLD, 15));
                 textField.setStyle("-fx-alignment: center;");
+
+                // Add borders to the 3x3 sub-boxes
+                BorderStrokeStyle strokeStyle = BorderStrokeStyle.SOLID;
+                BorderWidths borderWidths = new BorderWidths(
+                        row % 3 == 0 ? 2 : 1,  // Top border (thicker for 3x3 borders)
+                        col % 3 == 2 ? 2 : 1,  // Right border (thicker for 3x3 borders)
+                        row % 3 == 2 ? 2 : 1,  // Bottom border (thicker for 3x3 borders)
+                        col % 3 == 0 ? 2 : 1   // Left border (thicker for 3x3 borders)
+                );
+                textField.setBorder(new Border(new BorderStroke(Color.BLACK, strokeStyle, CornerRadii.EMPTY, borderWidths)));
 
                 // Check if cell is pre-filled -> make non-editable
                 if (sudokuGrid[row][col]!=0) {
@@ -150,6 +174,19 @@ public class SudokuController {
                                     mistakes++; // wrong input -> a strike
                                     mistakesLabel.setText("Mistakes " + mistakes + "/3");
                                 }
+
+                                // Check if game grid and solution grid match -> game won
+                                if (Arrays.deepEquals(sudokuGrid,solutionGrid)) {
+
+                                    handleGameWon();
+                                }
+
+                                // Check if max amount of mistakes, meaning 3/3
+                                if (mistakes==3) {
+
+                                    handleGameLost();
+                                }
+
                             } else {
                                 sudokuGrid[currentRow][currentCol] = 0;
                                 textField.setStyle("-fx-text-fill: black; -fx-alignment: center;");
@@ -163,6 +200,47 @@ public class SudokuController {
                 // Add the TextField to the GridPane at the specified position
                 gridPane.add(textField, col, row);
             }
+        }
+    }
+
+    private void handleGameWon() {
+        timer.stop(); // Stop the timer
+        pauseButton.setDisable(true); // Disable the pause button
+
+        // Show winning message
+        pauseMessage.setText("Congratulations, you won!");
+        pauseMessage.setVisible(true);
+
+        // Show the new game button
+        newGameButton.setVisible(true);
+    }
+
+    private void handleGameLost() {
+        timer.stop();
+        pauseButton.setDisable(true);
+
+        // Show losing message
+        pauseMessage.setText("Game Over!");
+        pauseMessage.setVisible(true);
+
+        // Show the new game button
+        newGameButton.setVisible(true);
+    }
+
+    @FXML
+    private void handleNewGame() {
+        // Load the Sudoku grid scene
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("startup_menu.fxml"));
+            Parent root = loader.load();
+
+            // Get the current stage using the button that triggered the event
+            Stage stage = (Stage) newGameButton.getScene().getWindow();
+            Scene scene = new Scene(root, 600, 600);
+            stage.setTitle("New Game");
+            stage.setScene(scene);
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 }

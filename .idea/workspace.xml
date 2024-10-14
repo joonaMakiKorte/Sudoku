@@ -4,10 +4,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="f3abaf89-6b09-4d91-975e-5dc0994e528e" name="Changes" comment="Added valid input recognition.">
+    <list default="true" id="f3abaf89-6b09-4d91-975e-5dc0994e528e" name="Changes" comment="Added a timer, pause and exit buttons, labels for difficulty and mistakes.">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/example/sudokuguifx/SudokuController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/sudokuguifx/SudokuController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/sudokuguifx/SudokuGUI.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/sudokuguifx/SudokuGUI.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/resources/com/example/sudokuguifx/sudoku.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/com/example/sudokuguifx/sudoku.fxml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -116,7 +115,15 @@
       <option name="project" value="LOCAL" />
       <updated>1728856206056</updated>
     </task>
-    <option name="localTasksCounter" value="5" />
+    <task id="LOCAL-00005" summary="Added a timer, pause and exit buttons, labels for difficulty and mistakes.">
+      <option name="closed" value="true" />
+      <created>1728924674921</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1728924674921</updated>
+    </task>
+    <option name="localTasksCounter" value="6" />
     <servers />
   </component>
   <component name="VcsManagerConfiguration">
@@ -124,6 +131,7 @@
     <MESSAGE value="Created a startup menu with difficulty selection." />
     <MESSAGE value="Added GenerateBoard class and difficulty selection. Generates board based on difficulty." />
     <MESSAGE value="Added valid input recognition." />
-    <option name="LAST_COMMIT_MESSAGE" value="Added valid input recognition." />
+    <MESSAGE value="Added a timer, pause and exit buttons, labels for difficulty and mistakes." />
+    <option name="LAST_COMMIT_MESSAGE" value="Added a timer, pause and exit buttons, labels for difficulty and mistakes." />
   </component>
 </project>
