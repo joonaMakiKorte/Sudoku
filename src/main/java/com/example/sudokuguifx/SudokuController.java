@@ -9,7 +9,6 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
-import javafx.scene.text.FontWeight;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.scene.control.Label;
@@ -21,14 +20,13 @@ import java.util.Arrays;
 
 public class SudokuController {
 
-    // 9x9 integer array for Sudoku grid
-    private int[][] sudokuGrid;
-    // Solution grid
-    private int [][] solutionGrid;
+    private int[][] sudokuGrid; // 9x9 integer array for Sudoku grid
+    private int [][] solutionGrid; // Solution grid
 
-    private int mistakes;
+    private int mistakes; // Count user mistakes
 
     private int difficulty; // The difficulty level passed from StartupController
+    private String difficultyS; // Difficulty as a string
 
     private Timeline timer; // Top keep track of the timer
     private int timeSeconds; // Track elapsed seconds
@@ -52,17 +50,15 @@ public class SudokuController {
     @FXML
     private Button newGameButton;
 
-    @FXML
-    private Label pauseMessage;
-
     // Set the difficulty level
     public void setDifficulty(String difficulty) {
 
+        this.difficultyS = difficulty;
         this.difficulty = switch (difficulty) {
-            case "Easy" -> 48;
-            case "Medium" -> 56;
-            case "Hard" -> 62;
-            default -> 68;
+            case "Easy" -> 45;
+            case "Medium" -> 50;
+            case "Hard" -> 55;
+            default -> 60;
         };
 
         difficultyLabel.setText(difficulty);
@@ -110,22 +106,16 @@ public class SudokuController {
             timer.pause();  // Pause the timer
             pauseButton.setText("Resume");  // Update button text
             gridPane.setVisible(false); // Hide the Sudoku grid
-            pauseMessage.setVisible(true); // Show pause message
+            difficultyLabel.setText("Game Paused"); // Show pause message
         } else {
             timer.play();  // Resume the timer
             pauseButton.setText("Pause");  // Update button text
             gridPane.setVisible(true); // Show the sudoku grid
-            pauseMessage.setVisible(false); // Hide pause message
+            difficultyLabel.setText(difficultyS);
         }
         isTimerRunning = !isTimerRunning;  // Toggle the state
     }
 
-    @FXML
-    private void handleExit() {
-        // Get the current stage using the button (or any UI element) and close the application
-        Stage stage = (Stage) pauseButton.getScene().getWindow();
-        stage.close();
-    }
 
     private void populateGrid() {
 
@@ -133,18 +123,18 @@ public class SudokuController {
             for (int col = 0; col < 9; col++) {
 
                 TextField textField = new TextField();
-                textField.setPrefWidth(40); // Set preferred width
-                textField.setPrefHeight(40); // Set preferred height
-                textField.setFont(Font.font("Verdana", FontWeight.BOLD, 15));
+                textField.setPrefWidth(50); // Set preferred width
+                textField.setPrefHeight(50); // Set preferred height
+                textField.setFont(Font.font("Verdana", 20));
                 textField.setStyle("-fx-alignment: center;");
 
                 // Add borders to the 3x3 sub-boxes
                 BorderStrokeStyle strokeStyle = BorderStrokeStyle.SOLID;
                 BorderWidths borderWidths = new BorderWidths(
-                        row % 3 == 0 ? 2 : 1,  // Top border (thicker for 3x3 borders)
-                        col % 3 == 2 ? 2 : 1,  // Right border (thicker for 3x3 borders)
-                        row % 3 == 2 ? 2 : 1,  // Bottom border (thicker for 3x3 borders)
-                        col % 3 == 0 ? 2 : 1   // Left border (thicker for 3x3 borders)
+                        row % 3 == 0 ? 4 : 2,  // Top border (thicker for 3x3 borders)
+                        col % 3 == 2 ? 4 : 2,  // Right border (thicker for 3x3 borders)
+                        row % 3 == 2 ? 4 : 2,  // Bottom border (thicker for 3x3 borders)
+                        col % 3 == 0 ? 4 : 2   // Left border (thicker for 3x3 borders)
                 );
                 textField.setBorder(new Border(new BorderStroke(Color.BLACK, strokeStyle, CornerRadii.EMPTY, borderWidths)));
 
@@ -208,8 +198,7 @@ public class SudokuController {
         pauseButton.setDisable(true); // Disable the pause button
 
         // Show winning message
-        pauseMessage.setText("Congratulations, you won!");
-        pauseMessage.setVisible(true);
+        difficultyLabel.setText("Congratulations, you won!");
 
         // Show the new game button
         newGameButton.setVisible(true);
@@ -220,8 +209,7 @@ public class SudokuController {
         pauseButton.setDisable(true);
 
         // Show losing message
-        pauseMessage.setText("Game Over!");
-        pauseMessage.setVisible(true);
+        difficultyLabel.setText("Game Over!");
 
         // Show the new game button
         newGameButton.setVisible(true);
@@ -242,5 +230,12 @@ public class SudokuController {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    @FXML
+    private void handleExit() {
+        // Get the current stage using the button (or any UI element) and close the application
+        Stage stage = (Stage) pauseButton.getScene().getWindow();
+        stage.close();
     }
 }

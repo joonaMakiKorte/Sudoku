@@ -8,7 +8,7 @@
 
 <VBox xmlns:fx="http://javafx.com/fxml" fx:controller="com.example.sudokuguifx.StartupController" alignment="CENTER" spacing="10">
     <!-- Dropdown menu for selecting difficulty -->
-    <ChoiceBox fx:id="difficultyChoiceBox" value="Easy">
+    <ChoiceBox fx:id="difficultyChoiceBox" prefWidth="100" prefHeight="40" value="Easy" style="-fx-font-size: 20px;">
         <items>
             <FXCollections fx:factory="observableArrayList">
                 <String fx:value="Easy"/>
@@ -19,6 +19,7 @@
         </items>
     </ChoiceBox>
 
-    <Button fx:id="startButton" text="Start Game" onAction="#handleStartGame"/>
-    <Button text="Exit" onAction="#handleExit"/>
+    <!-- Start and exit buttons-->
+    <Button fx:id="startButton" text="Start Game" prefWidth="140" prefHeight="40" style="-fx-font-size: 20px;" onAction="#handleStartGame"/>
+    <Button text="Exit" prefWidth="100" prefHeight="40" style="-fx-font-size: 20px;" onAction="#handleExit"/>
 </VBox>

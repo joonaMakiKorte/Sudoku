@@ -7,26 +7,32 @@
 <?import javafx.scene.control.Button?>
 
 <VBox spacing="10" alignment="CENTER" xmlns:fx="http://javafx.com/fxml" fx:controller="com.example.sudokuguifx.SudokuController">
-    <Label fx:id="difficultyLabel" text="Easy" style="-fx-font-size: 18px;" />
-    <Label fx:id="pauseMessage" text="Game Paused" style="-fx-font-size: 24px;" visible="false" />
+    <!--Difficulty label-->
+    <Label fx:id="difficultyLabel" text="Easy" style="-fx-font-size: 22px;" />
 
+    <!--Timer and mistakes-->
     <HBox spacing="20" alignment="CENTER">
-        <Label text="                                 " style="-fx-font-size: 18px;" />
-        <Label fx:id="timerLabel" text="00:00" style="-fx-font-size: 18px;" />
-        <Label text="        " style="-fx-font-size: 18px;" />
-        <Label fx:id="mistakesLabel" text="Mistakes 0/3" style="-fx-font-size: 18px;" />
+        <Label text="                                        " style="-fx-font-size: 18px;" />
+        <Label fx:id="timerLabel" text="00:00" style="-fx-font-size: 20px;" />
+        <Label text="             " style="-fx-font-size: 18px;" />
+        <Label fx:id="mistakesLabel" text="Mistakes 0/3" style="-fx-font-size: 20px;" />
     </HBox>
 
+    <!--Sudoku grid-->
     <GridPane fx:id="gridPane"
               hgap="5" vgap="5" alignment="CENTER">
     </GridPane>
 
+    <!--New game, pause and exit buttons-->
     <HBox spacing="10" alignment="CENTER">
-        <Label text="                           " style="-fx-font-size: 18px;" />
-        <Button fx:id="newGameButton" text="New Game" visible="false" onAction="#handleNewGame"/>
-        <Label text="      " style="-fx-font-size: 18px;" />
-        <Button fx:id="pauseButton" text="Pause" onAction="#toggleTimer"/>
-        <Button fx:id="exitButton" text="Exit" onAction="#handleExit"/>
+        <Label text="                                     " style="-fx-font-size: 18px;" />
+        <Button fx:id="newGameButton" text="New Game" prefWidth="100" prefHeight="40" style="-fx-font-size: 15px;" visible="false" onAction="#handleNewGame"/>
+        <Label text="     " style="-fx-font-size: 18px;" />
+        <Button fx:id="pauseButton" text="Pause" prefWidth="75" prefHeight="40" style="-fx-font-size: 15px;" onAction="#toggleTimer"/>
+        <Button text="Exit" prefWidth="60" prefHeight="40" style="-fx-font-size: 15px;" onAction="#handleExit"/>
     </HBox>
+
+    <!--Spacer for bottom-->
+    <Label text="                           " style="-fx-font-size: 18px;" />
 
 </VBox>

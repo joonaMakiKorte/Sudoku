@@ -13,10 +13,11 @@ public class GenerateBoard {
         this.B = 3;
         this.K = K;
 
-        this.board = new int[N][N];
-        this.solution = new int[N][N];
+        this.board = new int[N][N]; // Game grid
+        this.solution = new int[N][N]; // Solution grid
     }
 
+    // Fills game and solution grid
     public void fillValues() {
 
         fillDiagonal();
@@ -25,7 +26,7 @@ public class GenerateBoard {
         removeKDigits();
     }
 
-
+    // Fills the 3 diagonal sub-boxes
     private void fillDiagonal() {
 
         for (int i=0; i<N; i=i+B) {
@@ -33,6 +34,7 @@ public class GenerateBoard {
         }
     }
 
+    // Checks if value is unused in 3x3 sub-box
     private boolean unUsedInBox(int rowStart, int colStart, int num) {
 
         for (int i = 0; i < B; ++i) {
@@ -43,6 +45,7 @@ public class GenerateBoard {
         return true;
     }
 
+    // Fills box using random generator
     private void fillBox(int row, int col) {
 
         int num;
@@ -58,17 +61,20 @@ public class GenerateBoard {
         }
     }
 
+    // Return random int in range 1-9
     private int randomGenerator(int num) {
 
         return (int) Math.floor((Math.random()*num+1));
     }
 
+    // returns boolean indicating if safe to add to cell
     private boolean checkIfSafe(int i, int j, int num) {
 
         return (checkRowAndCol(i,j,num) &&
                 unUsedInBox(i-i%B,j-j%B,num));
     }
 
+    // returns boolean indicating if safe to add to row & col
     private boolean checkRowAndCol(int row, int col, int num) {
 
         for(int i = 0; i < 9; i++) {
@@ -78,6 +84,7 @@ public class GenerateBoard {
         return true;
     }
 
+    // Fill the remaining cells recursively using backtracking
     private boolean fillRemaining(int i, int j) {
 
         // we are over the last column
@@ -138,6 +145,7 @@ public class GenerateBoard {
         }
     }
 
+    // Remove digits from K random cells
     private void removeKDigits() {
         int count = K;
         while (count != 0) {
