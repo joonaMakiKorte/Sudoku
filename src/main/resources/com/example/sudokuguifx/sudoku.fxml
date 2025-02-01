@@ -25,7 +25,8 @@
 
     <!--New game, pause and exit buttons-->
     <HBox spacing="10" alignment="CENTER">
-        <Label text="                                     " style="-fx-font-size: 18px;" />
+        <Button fx:id="solveButton" text="Solve" prefWidth="100" prefHeight="40" style="-fx-font-size: 15px;" onAction="#handleSolve"/>
+        <Label text="               " style="-fx-font-size: 18px;" />
         <Button fx:id="newGameButton" text="New Game" prefWidth="100" prefHeight="40" style="-fx-font-size: 15px;" visible="false" onAction="#handleNewGame"/>
         <Label text="     " style="-fx-font-size: 18px;" />
         <Button fx:id="pauseButton" text="Pause" prefWidth="75" prefHeight="40" style="-fx-font-size: 15px;" onAction="#toggleTimer"/>
