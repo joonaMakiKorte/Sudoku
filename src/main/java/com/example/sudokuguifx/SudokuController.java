@@ -1,5 +1,6 @@
 package com.example.sudokuguifx;
 
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -17,6 +18,9 @@ import javafx.util.Duration;
 
 import java.io.IOException;
 import java.util.Arrays;
+import javafx.concurrent.Task;
+import javafx.animation.PauseTransition;
+import javafx.util.Duration;
 
 public class SudokuController {
 
@@ -24,6 +28,7 @@ public class SudokuController {
     private int [][] solutionGrid; // Solution grid
 
     private int mistakes; // Count user mistakes
+    private boolean solving = false; // Flag for checking if auto-solve is active
 
     private int difficulty; // The difficulty level passed from StartupController
     private String difficultyS; // Difficulty as a string
@@ -33,7 +38,7 @@ public class SudokuController {
     private boolean isTimerRunning = true; // Timer state
 
     @FXML
-    private GridPane gridPane;
+    public GridPane gridPane;
 
     @FXML
     private Label difficultyLabel;
@@ -49,6 +54,9 @@ public class SudokuController {
 
     @FXML
     private Button newGameButton;
+
+    @FXML
+    private Button solveButton;
 
     // Set the difficulty level
     public void setDifficulty(String difficulty) {
@@ -149,31 +157,27 @@ public class SudokuController {
                     textField.textProperty().addListener((observable, oldValue, newValue) -> {
                         if (newValue.matches("\\d?")) {
                             if (!newValue.isEmpty()) {
-
                                 // Update corresponding value in sudokuGrid
                                 sudokuGrid[currentRow][currentCol] = Integer.parseInt(newValue);
 
                                 // Compare with the solution grid
                                 if (sudokuGrid[currentRow][currentCol] == solutionGrid[currentRow][currentCol]) {
-
                                     // Correct value entered, make the TextField non-editable
                                     textField.setEditable(false);
                                     textField.setStyle("-fx-text-fill: green; -fx-alignment: center;");
                                 } else {
                                     textField.setStyle("-fx-text-fill: red; -fx-alignment: center;");
-                                    mistakes++; // wrong input -> a strike
+                                    if (!solving) mistakes++; // wrong input -> a strike
                                     mistakesLabel.setText("Mistakes " + mistakes + "/3");
                                 }
 
                                 // Check if game grid and solution grid match -> game won
                                 if (Arrays.deepEquals(sudokuGrid,solutionGrid)) {
-
                                     handleGameWon();
                                 }
 
                                 // Check if max amount of mistakes, meaning 3/3
                                 if (mistakes==3) {
-
                                     handleGameLost();
                                 }
 
@@ -196,6 +200,7 @@ public class SudokuController {
     private void handleGameWon() {
         timer.stop(); // Stop the timer
         pauseButton.setDisable(true); // Disable the pause button
+        solveButton.setVisible(false);
 
         // Show winning message
         difficultyLabel.setText("Congratulations, you won!");
@@ -206,7 +211,8 @@ public class SudokuController {
 
     private void handleGameLost() {
         timer.stop();
-        pauseButton.setDisable(true);
+        pauseButton.setVisible(false);
+        solveButton.setVisible(false);
 
         // Show losing message
         difficultyLabel.setText("Game Over!");
@@ -238,4 +244,61 @@ public class SudokuController {
         Stage stage = (Stage) pauseButton.getScene().getWindow();
         stage.close();
     }
+
+    @FXML
+    private void handleSolve() {
+        timer.stop();
+        pauseButton.setDisable(true);
+        solveButton.setDisable(true);
+
+        // Disable mistake counting
+        solving = true;
+
+        difficultyLabel.setText("Solving...");
+
+        // Create a Task to run the solver on a background thread
+        Task<Void> solverTask = new Task<Void>() {
+            @Override
+            protected Void call() throws Exception {
+                // Solve the puzzle and pass a callback to update the UI
+                Solver.solve(sudokuGrid, (row, col, value) -> {
+                    // Update the UI on the JavaFX Application Thread
+                    Platform.runLater(() -> {
+                        // Get the TextField at the current row and column
+                        TextField textField = getTextFieldFromGridPane(col, row);
+                        if (textField != null) {
+                            // Update the TextField with the new value
+                            textField.setText(value == 0 ? "" : String.valueOf(value));
+                            textField.setStyle("-fx-text-fill: blue; -fx-alignment: center;"); // Mark as in-progress
+                        }
+
+                        // Introduce a delay of 500 milliseconds
+                        PauseTransition pause = new PauseTransition(Duration.millis(5));
+                        pause.setOnFinished(event -> {
+                            // Continue solving after the delay
+                        });
+                        pause.play();
+                    });
+
+                    // Introduce a delay in the background thread
+                    Thread.sleep(5);
+                });
+                return null;
+            }
+        };
+
+        // Start the solver task
+        new Thread(solverTask).start();
+    }
+
+    // Helper method to get a TextField from a specific cell in the GridPane
+    public TextField getTextFieldFromGridPane(int col, int row) {
+        for (javafx.scene.Node node : gridPane.getChildren()) {
+            if (GridPane.getColumnIndex(node) == col && GridPane.getRowIndex(node) == row && node instanceof TextField) {
+                return (TextField) node;
+            }
+        }
+        return null; // Return null if no TextField is found at the specified location
+    }
 }
+
