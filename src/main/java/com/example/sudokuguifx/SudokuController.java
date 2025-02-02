@@ -3,6 +3,8 @@ package com.example.sudokuguifx;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -27,7 +29,6 @@ import javafx.animation.PauseTransition;
 
 public class SudokuController {
 
-    public ImageView imageView;
     private int[][] sudokuGrid; // 9x9 integer array for Sudoku grid
     private int [][] solutionGrid; // Solution grid
 
@@ -57,13 +58,15 @@ public class SudokuController {
     private Button newGameButton;
     @FXML
     private Button solveButton;
+
+    // Initialize images for buttons
     @FXML
-    private void initialize() { // Initializes images for solve and hint buttons
+    private void initialize() {
         Image lockIcon = new Image(getClass().getResource("images/lock-icon.png").toExternalForm());
-        ImageView imageView = new ImageView(lockIcon);
-        imageView.setFitWidth(20);
-        imageView.setFitHeight(20);
-        solveButton.setGraphic(imageView);
+        ImageView solveImageView = new ImageView(lockIcon);
+        solveImageView.setFitWidth(20);
+        solveImageView.setFitHeight(20);
+        solveButton.setGraphic(solveImageView);
     }
 
     // Set the difficulty level
@@ -136,25 +139,35 @@ public class SudokuController {
 
 
     private void populateGrid() {
+        // Set all boxes next to each other without gaps
+        gridPane.setHgap(0);
+        gridPane.setVgap(0);
+        gridPane.setGridLinesVisible(false);
 
         for (int row = 0; row < 9; row++) {
             for (int col = 0; col < 9; col++) {
 
                 TextField textField = new TextField();
-                textField.setPrefWidth(50); // Set preferred width
-                textField.setPrefHeight(50); // Set preferred height
+                textField.setPrefSize(50,50); // Uniform cell size
                 textField.setFont(Font.font("Verdana", 20));
-                textField.setStyle("-fx-alignment: center;");
+                textField.setAlignment(Pos.CENTER);
 
-                // Add borders to the 3x3 sub-boxes
-                BorderStrokeStyle strokeStyle = BorderStrokeStyle.SOLID;
-                BorderWidths borderWidths = new BorderWidths(
-                        row % 3 == 0 ? 4 : 2,  // Top border (thicker for 3x3 borders)
-                        col % 3 == 2 ? 4 : 2,  // Right border (thicker for 3x3 borders)
-                        row % 3 == 2 ? 4 : 2,  // Bottom border (thicker for 3x3 borders)
-                        col % 3 == 0 ? 4 : 2   // Left border (thicker for 3x3 borders)
-                );
-                textField.setBorder(new Border(new BorderStroke(Color.BLACK, strokeStyle, CornerRadii.EMPTY, borderWidths)));
+                // Apply Borders for 3x3 Sub-boxes
+                int top = (row % 3 == 0) ? 2 : 1;
+                int right = (col % 3 == 2) ? 2 : 1;
+                int bottom = (row % 3 == 2) ? 2 : 1;
+                int left = (col % 3 == 0) ? 2 : 1;
+
+                if (row == 0) top = 4;
+                if (col == 0) left = 4;
+                if (row == 8) bottom = 4;
+                if (col == 8) right = 4;
+
+                textField.setBorder(new Border(new BorderStroke(
+                        Color.BLACK, Color.BLACK, Color.BLACK, Color.BLACK,
+                        BorderStrokeStyle.SOLID, BorderStrokeStyle.SOLID,
+                        BorderStrokeStyle.SOLID, BorderStrokeStyle.SOLID,
+                        CornerRadii.EMPTY, new BorderWidths(top, right, bottom, left), Insets.EMPTY)));
 
                 // Check if cell is pre-filled -> make non-editable
                 if (sudokuGrid[row][col]!=0) {
@@ -163,6 +176,7 @@ public class SudokuController {
                 } else {
                     final int currentRow = row;
                     final int currentCol = col;
+
                     // Limit input to single digit
                     textField.textProperty().addListener((observable, oldValue, newValue) -> {
                         if (newValue.matches("\\d?")) {
@@ -174,26 +188,20 @@ public class SudokuController {
                                 if (sudokuGrid[currentRow][currentCol] == solutionGrid[currentRow][currentCol]) {
                                     // Correct value entered, make the TextField non-editable
                                     textField.setEditable(false);
-                                    textField.setStyle("-fx-text-fill: green; -fx-alignment: center;");
+                                    textField.setStyle("-fx-text-fill: green");
                                 } else {
-                                    textField.setStyle("-fx-text-fill: red; -fx-alignment: center;");
+                                    textField.setStyle("-fx-text-fill: red");
                                     if (!solving) mistakes++; // wrong input -> a strike
                                     mistakesLabel.setText("Mistakes " + mistakes + "/3");
                                 }
 
                                 // Check if game grid and solution grid match -> game won
-                                if (Arrays.deepEquals(sudokuGrid,solutionGrid)) {
-                                    handleGameWon();
-                                }
-
-                                // Check if max amount of mistakes, meaning 3/3
-                                if (mistakes==3) {
-                                    handleGameLost();
-                                }
-
+                                // Also if mistakes == 3 -> game lost
+                                if (Arrays.deepEquals(sudokuGrid,solutionGrid)) handleGameWon();
+                                if (mistakes==3) handleGameLost();
                             } else {
                                 sudokuGrid[currentRow][currentCol] = 0;
-                                textField.setStyle("-fx-text-fill: black; -fx-alignment: center;");
+                                textField.setStyle("-fx-text-fill: black");
                             }
                         } else {
                             textField.setText(oldValue); // Restore old value if input is invalid
