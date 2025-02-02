@@ -1,5 +1,6 @@
 package com.example.sudokuguifx;
 
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -13,7 +14,6 @@ public class StartupController {
 
     @FXML
     private Button startButton; // Link the start button from FXML, or you can use any UI element
-
     @FXML
     private ChoiceBox<String> difficultyChoiceBox; // The dropdown menu for difficulty
 
@@ -53,5 +53,11 @@ public class StartupController {
         // Get the current stage using the button (or any UI element) and close the application
         Stage stage = (Stage) startButton.getScene().getWindow();
         stage.close();
+
+        // Ensure all JavaFX processes are stopped
+        Platform.exit();
+
+        // Forcefully terminate the JVM
+        System.exit(0);
     }
 }

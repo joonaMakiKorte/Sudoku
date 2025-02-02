@@ -13,14 +13,15 @@ import javafx.scene.text.Font;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.scene.control.Label;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.util.Duration;
-
 import java.io.IOException;
 import java.util.Arrays;
+import java.util.concurrent.atomic.AtomicBoolean;
+
 import javafx.concurrent.Task;
 import javafx.animation.PauseTransition;
-import javafx.util.Duration;
 
 public class SudokuController {
 
@@ -38,23 +39,17 @@ public class SudokuController {
     private boolean isTimerRunning = true; // Timer state
 
     @FXML
-    public GridPane gridPane;
-
+    private GridPane gridPane;
     @FXML
     private Label difficultyLabel;
-
     @FXML
     private Label timerLabel;
-
     @FXML
     private Label mistakesLabel;
-
     @FXML
-    private Button pauseButton; //Pause/Resume
-
+    private Button pauseButton;
     @FXML
     private Button newGameButton;
-
     @FXML
     private Button solveButton;
 
@@ -243,14 +238,51 @@ public class SudokuController {
         // Get the current stage using the button (or any UI element) and close the application
         Stage stage = (Stage) pauseButton.getScene().getWindow();
         stage.close();
+
+        // Ensure all JavaFX processes are stopped
+        Platform.exit();
+
+        // Forcefully terminate the JVM
+        System.exit(0);
     }
 
     @FXML
     private void handleSolve() {
-        timer.stop();
+        timer.pause();
         pauseButton.setDisable(true);
         solveButton.setDisable(true);
 
+        // Load the password scene
+        AtomicBoolean isPasswordCorrect = new AtomicBoolean(false);
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("password_menu.fxml"));
+            Parent root = loader.load();
+
+            // Get the controller and pass the AtomicBoolean reference
+            PasswordController controller = loader.getController();
+            controller.setPasswordCorrect(isPasswordCorrect);
+
+            // Load new stage
+            Stage stage = new Stage();
+            Scene scene = new Scene(root, 250, 150);
+            stage.initModality(Modality.APPLICATION_MODAL); // Block interaction with main gui
+            stage.setTitle("Enter Password");
+            stage.setScene(scene);
+            stage.showAndWait(); // Wait for the password scene to be closed
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
+        // If correct password activate solver
+        if (isPasswordCorrect.get()) {
+            activateSolve();
+        } else {
+            timer.play();
+            pauseButton.setDisable(false);
+        }
+    }
+
+    private void activateSolve() {
         // Disable mistake counting
         solving = true;
 
@@ -292,7 +324,7 @@ public class SudokuController {
     }
 
     // Helper method to get a TextField from a specific cell in the GridPane
-    public TextField getTextFieldFromGridPane(int col, int row) {
+    private TextField getTextFieldFromGridPane(int col, int row) {
         for (javafx.scene.Node node : gridPane.getChildren()) {
             if (GridPane.getColumnIndex(node) == col && GridPane.getRowIndex(node) == row && node instanceof TextField) {
                 return (TextField) node;
