@@ -3,24 +3,29 @@ package com.example.sudokuguifx;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.scene.control.Label;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.util.Duration;
-
 import java.io.IOException;
 import java.util.Arrays;
+import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.atomic.AtomicInteger;
 import javafx.concurrent.Task;
 import javafx.animation.PauseTransition;
-import javafx.util.Duration;
 
 public class SudokuController {
 
@@ -37,26 +42,32 @@ public class SudokuController {
     private int timeSeconds; // Track elapsed seconds
     private boolean isTimerRunning = true; // Timer state
 
-    @FXML
-    public GridPane gridPane;
+    private AtomicInteger tries = new AtomicInteger(3);
 
+    @FXML
+    private GridPane gridPane;
     @FXML
     private Label difficultyLabel;
-
     @FXML
     private Label timerLabel;
-
     @FXML
     private Label mistakesLabel;
-
     @FXML
-    private Button pauseButton; //Pause/Resume
-
+    private Button pauseButton;
     @FXML
     private Button newGameButton;
-
     @FXML
     private Button solveButton;
+
+    // Initialize images for buttons
+    @FXML
+    private void initialize() {
+        Image lockIcon = new Image(getClass().getResource("images/lock-icon.png").toExternalForm());
+        ImageView solveImageView = new ImageView(lockIcon);
+        solveImageView.setFitWidth(20);
+        solveImageView.setFitHeight(20);
+        solveButton.setGraphic(solveImageView);
+    }
 
     // Set the difficulty level
     public void setDifficulty(String difficulty) {
@@ -114,11 +125,13 @@ public class SudokuController {
             timer.pause();  // Pause the timer
             pauseButton.setText("Resume");  // Update button text
             gridPane.setVisible(false); // Hide the Sudoku grid
+            solveButton.setVisible(false);
             difficultyLabel.setText("Game Paused"); // Show pause message
         } else {
             timer.play();  // Resume the timer
             pauseButton.setText("Pause");  // Update button text
             gridPane.setVisible(true); // Show the sudoku grid
+            solveButton.setVisible(true);
             difficultyLabel.setText(difficultyS);
         }
         isTimerRunning = !isTimerRunning;  // Toggle the state
@@ -126,25 +139,35 @@ public class SudokuController {
 
 
     private void populateGrid() {
+        // Set all boxes next to each other without gaps
+        gridPane.setHgap(0);
+        gridPane.setVgap(0);
+        gridPane.setGridLinesVisible(false);
 
         for (int row = 0; row < 9; row++) {
             for (int col = 0; col < 9; col++) {
 
                 TextField textField = new TextField();
-                textField.setPrefWidth(50); // Set preferred width
-                textField.setPrefHeight(50); // Set preferred height
+                textField.setPrefSize(50,50); // Uniform cell size
                 textField.setFont(Font.font("Verdana", 20));
-                textField.setStyle("-fx-alignment: center;");
+                textField.setAlignment(Pos.CENTER);
 
-                // Add borders to the 3x3 sub-boxes
-                BorderStrokeStyle strokeStyle = BorderStrokeStyle.SOLID;
-                BorderWidths borderWidths = new BorderWidths(
-                        row % 3 == 0 ? 4 : 2,  // Top border (thicker for 3x3 borders)
-                        col % 3 == 2 ? 4 : 2,  // Right border (thicker for 3x3 borders)
-                        row % 3 == 2 ? 4 : 2,  // Bottom border (thicker for 3x3 borders)
-                        col % 3 == 0 ? 4 : 2   // Left border (thicker for 3x3 borders)
-                );
-                textField.setBorder(new Border(new BorderStroke(Color.BLACK, strokeStyle, CornerRadii.EMPTY, borderWidths)));
+                // Apply Borders for 3x3 Sub-boxes
+                int top = (row % 3 == 0) ? 2 : 1;
+                int right = (col % 3 == 2) ? 2 : 1;
+                int bottom = (row % 3 == 2) ? 2 : 1;
+                int left = (col % 3 == 0) ? 2 : 1;
+
+                if (row == 0) top = 4;
+                if (col == 0) left = 4;
+                if (row == 8) bottom = 4;
+                if (col == 8) right = 4;
+
+                textField.setBorder(new Border(new BorderStroke(
+                        Color.BLACK, Color.BLACK, Color.BLACK, Color.BLACK,
+                        BorderStrokeStyle.SOLID, BorderStrokeStyle.SOLID,
+                        BorderStrokeStyle.SOLID, BorderStrokeStyle.SOLID,
+                        CornerRadii.EMPTY, new BorderWidths(top, right, bottom, left), Insets.EMPTY)));
 
                 // Check if cell is pre-filled -> make non-editable
                 if (sudokuGrid[row][col]!=0) {
@@ -153,6 +176,7 @@ public class SudokuController {
                 } else {
                     final int currentRow = row;
                     final int currentCol = col;
+
                     // Limit input to single digit
                     textField.textProperty().addListener((observable, oldValue, newValue) -> {
                         if (newValue.matches("\\d?")) {
@@ -164,26 +188,20 @@ public class SudokuController {
                                 if (sudokuGrid[currentRow][currentCol] == solutionGrid[currentRow][currentCol]) {
                                     // Correct value entered, make the TextField non-editable
                                     textField.setEditable(false);
-                                    textField.setStyle("-fx-text-fill: green; -fx-alignment: center;");
+                                    textField.setStyle("-fx-text-fill: green");
                                 } else {
-                                    textField.setStyle("-fx-text-fill: red; -fx-alignment: center;");
+                                    textField.setStyle("-fx-text-fill: red");
                                     if (!solving) mistakes++; // wrong input -> a strike
                                     mistakesLabel.setText("Mistakes " + mistakes + "/3");
                                 }
 
                                 // Check if game grid and solution grid match -> game won
-                                if (Arrays.deepEquals(sudokuGrid,solutionGrid)) {
-                                    handleGameWon();
-                                }
-
-                                // Check if max amount of mistakes, meaning 3/3
-                                if (mistakes==3) {
-                                    handleGameLost();
-                                }
-
+                                // Also if mistakes == 3 -> game lost
+                                if (Arrays.deepEquals(sudokuGrid,solutionGrid)) handleGameWon();
+                                if (mistakes==3) handleGameLost();
                             } else {
                                 sudokuGrid[currentRow][currentCol] = 0;
-                                textField.setStyle("-fx-text-fill: black; -fx-alignment: center;");
+                                textField.setStyle("-fx-text-fill: black");
                             }
                         } else {
                             textField.setText(oldValue); // Restore old value if input is invalid
@@ -243,14 +261,56 @@ public class SudokuController {
         // Get the current stage using the button (or any UI element) and close the application
         Stage stage = (Stage) pauseButton.getScene().getWindow();
         stage.close();
+
+        // Ensure all JavaFX processes are stopped
+        Platform.exit();
+
+        // Forcefully terminate the JVM
+        System.exit(0);
     }
 
     @FXML
     private void handleSolve() {
-        timer.stop();
+        timer.pause();
         pauseButton.setDisable(true);
         solveButton.setDisable(true);
 
+        // Load the password scene
+        AtomicBoolean isPasswordCorrect = new AtomicBoolean(false);
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("password_menu.fxml"));
+            Parent root = loader.load();
+
+            // Get the controller and pass the AtomicBoolean reference
+            PasswordController controller = loader.getController();
+            controller.setPasswordCorrect(isPasswordCorrect,tries);
+
+            // Load new stage
+            Stage stage = new Stage();
+            Scene scene = new Scene(root, 250, 150);
+            stage.initModality(Modality.APPLICATION_MODAL); // Block interaction with main gui
+            stage.setTitle("Enter Password");
+            stage.setScene(scene);
+            stage.showAndWait(); // Wait for the password scene to be closed
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
+        // If correct password activate solver
+        if (isPasswordCorrect.get()) {
+            activateSolve();
+        } else {
+            timer.play();
+            pauseButton.setDisable(false);
+        }
+
+        // If tries left un-disable the solve button
+        if (tries.get() != 0) {
+            solveButton.setDisable(false);
+        }
+    }
+
+    private void activateSolve() {
         // Disable mistake counting
         solving = true;
 
@@ -292,7 +352,7 @@ public class SudokuController {
     }
 
     // Helper method to get a TextField from a specific cell in the GridPane
-    public TextField getTextFieldFromGridPane(int col, int row) {
+    private TextField getTextFieldFromGridPane(int col, int row) {
         for (javafx.scene.Node node : gridPane.getChildren()) {
             if (GridPane.getColumnIndex(node) == col && GridPane.getRowIndex(node) == row && node instanceof TextField) {
                 return (TextField) node;

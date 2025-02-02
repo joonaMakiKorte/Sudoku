@@ -5,8 +5,11 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.image.Image?>
 
 <VBox spacing="10" alignment="CENTER" xmlns:fx="http://javafx.com/fxml" fx:controller="com.example.sudokuguifx.SudokuController">
+
     <!--Difficulty label-->
     <Label fx:id="difficultyLabel" text="Easy" style="-fx-font-size: 22px;" />
 
@@ -25,7 +28,7 @@
 
     <!--New game, pause and exit buttons-->
     <HBox spacing="10" alignment="CENTER">
-        <Button fx:id="solveButton" text="Solve" prefWidth="100" prefHeight="40" style="-fx-font-size: 15px;" onAction="#handleSolve"/>
+        <Button fx:id="solveButton" text="Solve" prefWidth="90" style="-fx-font-size: 15px;" prefHeight="40" onAction="#handleSolve"/>
         <Label text="               " style="-fx-font-size: 18px;" />
         <Button fx:id="newGameButton" text="New Game" prefWidth="100" prefHeight="40" style="-fx-font-size: 15px;" visible="false" onAction="#handleNewGame"/>
         <Label text="     " style="-fx-font-size: 18px;" />

@@ -4,11 +4,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="f3abaf89-6b09-4d91-975e-5dc0994e528e" name="Changes" comment="Final cosmetic touches and added comments">
+    <list default="true" id="f3abaf89-6b09-4d91-975e-5dc0994e528e" name="Changes" comment="Lock icon for solve button">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/sudokuguifx/Solver.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/sudokuguifx/Solver.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/example/sudokuguifx/SudokuController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/sudokuguifx/SudokuController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/com/example/sudokuguifx/sudoku.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/com/example/sudokuguifx/sudoku.fxml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -18,12 +16,17 @@
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
       <list>
-        <option value="FxmlFile" />
         <option value="Class" />
+        <option value="FxmlFile" />
       </list>
     </option>
   </component>
   <component name="Git.Settings">
+    <option name="RECENT_BRANCH_BY_REPOSITORY">
+      <map>
+        <entry key="$PROJECT_DIR$" value="testing" />
+      </map>
+    </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
   <component name="GitHubPullRequestSearchHistory">{
@@ -54,21 +57,22 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;Application.HelloApplication.executor&quot;: &quot;Run&quot;,
-    &quot;Application.SudokuGUI.executor&quot;: &quot;Run&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;master&quot;,
-    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
-    &quot;last_opened_file_path&quot;: &quot;C:/Users/joona/IdeaProjects/JavaFX/javafx-sdk-23/lib/javafx.web.jar&quot;,
-    &quot;project.structure.last.edited&quot;: &quot;Global Libraries&quot;,
-    &quot;project.structure.proportion&quot;: &quot;0.15&quot;,
-    &quot;project.structure.side.proportion&quot;: &quot;0.2&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "Application.HelloApplication.executor": "Run",
+    "Application.SudokuGUI.executor": "Run",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "git-widget-placeholder": "different-grid",
+    "kotlin-language-version-configured": "true",
+    "last_opened_file_path": "C:/Users/joona/IdeaProjects/JavaFX/javafx-sdk-23/lib/javafx.web.jar",
+    "project.structure.last.edited": "Global Libraries",
+    "project.structure.proportion": "0.15",
+    "project.structure.side.proportion": "0.2"
   }
-}</component>
+}]]></component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\joona\IdeaProjects\sudokuGUIFX\src\main\resources\com\example\sudokuguifx\images" />
       <recent name="C:\Users\joona\IdeaProjects\sudokuGUIFX\src\main\resources\com\example\sudokuguifx" />
     </key>
     <key name="MoveClassesOrPackagesDialog.RECENTS_KEY">
@@ -140,7 +144,39 @@
       <option name="project" value="LOCAL" />
       <updated>1729190441650</updated>
     </task>
-    <option name="localTasksCounter" value="8" />
+    <task id="LOCAL-00008" summary="Added auto-solver functionality">
+      <option name="closed" value="true" />
+      <created>1738454020719</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1738454020719</updated>
+    </task>
+    <task id="LOCAL-00009" summary="Password screen for solver">
+      <option name="closed" value="true" />
+      <created>1738515780161</created>
+      <option name="number" value="00009" />
+      <option name="presentableId" value="LOCAL-00009" />
+      <option name="project" value="LOCAL" />
+      <updated>1738515780161</updated>
+    </task>
+    <task id="LOCAL-00010" summary="Lock icon for solve button">
+      <option name="closed" value="true" />
+      <created>1738525913950</created>
+      <option name="number" value="00010" />
+      <option name="presentableId" value="LOCAL-00010" />
+      <option name="project" value="LOCAL" />
+      <updated>1738525913950</updated>
+    </task>
+    <task id="LOCAL-00011" summary="Lock icon for solve button">
+      <option name="closed" value="true" />
+      <created>1738525932285</created>
+      <option name="number" value="00011" />
+      <option name="presentableId" value="LOCAL-00011" />
+      <option name="project" value="LOCAL" />
+      <updated>1738525932285</updated>
+    </task>
+    <option name="localTasksCounter" value="12" />
     <servers />
   </component>
   <component name="VcsManagerConfiguration">
@@ -151,6 +187,9 @@
     <MESSAGE value="Added a timer, pause and exit buttons, labels for difficulty and mistakes." />
     <MESSAGE value="Can handle game won and game lost. Added a new game button to take to startup scene." />
     <MESSAGE value="Final cosmetic touches and added comments" />
-    <option name="LAST_COMMIT_MESSAGE" value="Final cosmetic touches and added comments" />
+    <MESSAGE value="Added auto-solver functionality" />
+    <MESSAGE value="Password screen for solver" />
+    <MESSAGE value="Lock icon for solve button" />
+    <option name="LAST_COMMIT_MESSAGE" value="Lock icon for solve button" />
   </component>
 </project>
