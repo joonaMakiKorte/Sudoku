@@ -60,6 +60,7 @@ public class SudokuController {
     private Button solveButton;
 
     // Initialize images for buttons
+    // Test commit
     @FXML
     private void initialize() {
         Image lockIcon = new Image(getClass().getResource("images/lock-icon.png").toExternalForm());
