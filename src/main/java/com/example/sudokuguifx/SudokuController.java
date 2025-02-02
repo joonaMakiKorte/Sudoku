@@ -7,6 +7,8 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
@@ -19,12 +21,13 @@ import javafx.util.Duration;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.concurrent.atomic.AtomicBoolean;
-
+import java.util.concurrent.atomic.AtomicInteger;
 import javafx.concurrent.Task;
 import javafx.animation.PauseTransition;
 
 public class SudokuController {
 
+    public ImageView imageView;
     private int[][] sudokuGrid; // 9x9 integer array for Sudoku grid
     private int [][] solutionGrid; // Solution grid
 
@@ -37,6 +40,8 @@ public class SudokuController {
     private Timeline timer; // Top keep track of the timer
     private int timeSeconds; // Track elapsed seconds
     private boolean isTimerRunning = true; // Timer state
+
+    private AtomicInteger tries = new AtomicInteger(3);
 
     @FXML
     private GridPane gridPane;
@@ -52,6 +57,14 @@ public class SudokuController {
     private Button newGameButton;
     @FXML
     private Button solveButton;
+    @FXML
+    private void initialize() { // Initializes images for solve and hint buttons
+        Image lockIcon = new Image(getClass().getResource("images/lock-icon.png").toExternalForm());
+        ImageView imageView = new ImageView(lockIcon);
+        imageView.setFitWidth(20);
+        imageView.setFitHeight(20);
+        solveButton.setGraphic(imageView);
+    }
 
     // Set the difficulty level
     public void setDifficulty(String difficulty) {
@@ -109,11 +122,13 @@ public class SudokuController {
             timer.pause();  // Pause the timer
             pauseButton.setText("Resume");  // Update button text
             gridPane.setVisible(false); // Hide the Sudoku grid
+            solveButton.setVisible(false);
             difficultyLabel.setText("Game Paused"); // Show pause message
         } else {
             timer.play();  // Resume the timer
             pauseButton.setText("Pause");  // Update button text
             gridPane.setVisible(true); // Show the sudoku grid
+            solveButton.setVisible(true);
             difficultyLabel.setText(difficultyS);
         }
         isTimerRunning = !isTimerRunning;  // Toggle the state
@@ -260,7 +275,7 @@ public class SudokuController {
 
             // Get the controller and pass the AtomicBoolean reference
             PasswordController controller = loader.getController();
-            controller.setPasswordCorrect(isPasswordCorrect);
+            controller.setPasswordCorrect(isPasswordCorrect,tries);
 
             // Load new stage
             Stage stage = new Stage();
@@ -279,6 +294,11 @@ public class SudokuController {
         } else {
             timer.play();
             pauseButton.setDisable(false);
+        }
+
+        // If tries left un-disable the solve button
+        if (tries.get() != 0) {
+            solveButton.setDisable(false);
         }
     }
 

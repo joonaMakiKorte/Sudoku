@@ -1,22 +1,16 @@
 package com.example.sudokuguifx;
 
-import javafx.application.Platform;
 import javafx.fxml.FXML;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.stage.Stage;
-import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Button;
-import javafx.scene.control.ChoiceBox;
-import java.io.IOException;
-import java.util.Objects;
 import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class PasswordController {
 
-    private int tries = 3;
+    private AtomicInteger tries;
     private AtomicBoolean passwordCorrect;
 
     @FXML
@@ -28,8 +22,10 @@ public class PasswordController {
     @FXML
     private Button cancelButton;
 
-    public void setPasswordCorrect(AtomicBoolean passwordCorrect) {
+    public void setPasswordCorrect(AtomicBoolean passwordCorrect, AtomicInteger tries) {
         this.passwordCorrect = passwordCorrect;
+        this.tries = tries;
+        triesLabel.setText("Tries left: " + tries.get());
     }
 
     @FXML
@@ -42,14 +38,14 @@ public class PasswordController {
         } else {
             passwordCorrect.set(false);
             passwordField.clear();
-            --tries;
+            tries.decrementAndGet();
         }
 
         // Update tries left
-        triesLabel.setText("Tries left: " + tries);
+        triesLabel.setText("Tries left: " + tries.get());
 
         // If 0 tries left close window
-        if (tries == 0) {
+        if (tries.get() == 0) {
             closeWindow();
         }
     }

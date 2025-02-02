@@ -7,6 +7,7 @@
 <?import java.lang.String?>
 
 <VBox xmlns:fx="http://javafx.com/fxml" fx:controller="com.example.sudokuguifx.StartupController" alignment="CENTER" spacing="10">
+
     <!-- Dropdown menu for selecting difficulty -->
     <ChoiceBox fx:id="difficultyChoiceBox" prefWidth="100" prefHeight="40" value="Easy" style="-fx-font-size: 20px;">
         <items>
