@@ -322,7 +322,7 @@ public class SudokuController {
             @Override
             protected Void call() throws Exception {
                 // Solve the puzzle and pass a callback to update the UI
-                Solver.solve(sudokuGrid, (row, col, value) -> {
+                Solver.solveSudoku(sudokuGrid, (row, col, value) -> {
                     // Update the UI on the JavaFX Application Thread
                     Platform.runLater(() -> {
                         // Get the TextField at the current row and column
