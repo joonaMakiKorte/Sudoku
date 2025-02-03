@@ -4,13 +4,11 @@ public class GenerateBoard {
 
     int[][] board; //board as matrix
     int[][] solution; //board to store solution
-    int N; //number of rows/cols
-    int B; //number of rows/cols of box
+    private final int N = 9; //number of rows/cols
+    private final int B = 3; //number of rows/cols of box
     int K;
 
     GenerateBoard(int K) {
-        this.N = 9;
-        this.B = 3;
         this.K = K;
 
         this.board = new int[N][N]; // Game grid
@@ -34,17 +32,6 @@ public class GenerateBoard {
         }
     }
 
-    // Checks if value is unused in 3x3 sub-box
-    private boolean unUsedInBox(int rowStart, int colStart, int num) {
-
-        for (int i = 0; i < B; ++i) {
-            for (int j = 0; j < B; ++j) {
-                if (board[rowStart + i][colStart + j] == num) return false;
-            }
-        }
-        return true;
-    }
-
     // Fills box using random generator
     private void fillBox(int row, int col) {
 
@@ -52,36 +39,13 @@ public class GenerateBoard {
         for (int i=0; i<B; ++i) {
             for (int j=0; j<B; ++j) {
                 do {
-                    num = randomGenerator(N);
+                    num = Utils.randomGenerator(N);
                 }
-                while (!unUsedInBox(row,col,num));
+                while (!Utils.unUsedInBox(board,row,col,num));
 
                 this.board[row+i][col+j] = num;
             }
         }
-    }
-
-    // Return random int in range 1-9
-    private int randomGenerator(int num) {
-
-        return (int) Math.floor((Math.random()*num+1));
-    }
-
-    // returns boolean indicating if safe to add to cell
-    private boolean checkIfSafe(int i, int j, int num) {
-
-        return (checkRowAndCol(i,j,num) &&
-                unUsedInBox(i-i%B,j-j%B,num));
-    }
-
-    // returns boolean indicating if safe to add to row & col
-    private boolean checkRowAndCol(int row, int col, int num) {
-
-        for(int i = 0; i < 9; i++) {
-            if(board[i][col] != 0 && board[i][col] == num) return false; //check row
-            if(board[row][i] != 0 && board[row][i] == num) return false; //check column
-        }
-        return true;
     }
 
     // Fill the remaining cells recursively using backtracking
@@ -128,7 +92,7 @@ public class GenerateBoard {
         // add to board if valid placement
         // recursively fill board by backtracking
         for (int num=1; num<=N;num++) {
-            if (checkIfSafe(i,j,num)) {
+            if (Utils.checkIfSafe(board,i,j,num)) {
                 this.board[i][j] = num;
                 if (fillRemaining(i,j+1)) return true;
                this.board[i][j] = 0;
@@ -149,7 +113,7 @@ public class GenerateBoard {
     private void removeKDigits() {
         int count = K;
         while (count != 0) {
-            int cellId = randomGenerator(N*N)-1;
+            int cellId = Utils.randomGenerator(N*N)-1;
             int i = (cellId/N);
             int j = cellId%N;
 

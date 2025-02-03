@@ -4,7 +4,14 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="f3abaf89-6b09-4d91-975e-5dc0994e528e" name="Changes" comment="Branches up to date" />
+    <list default="true" id="f3abaf89-6b09-4d91-975e-5dc0994e528e" name="Changes" comment="Test commit">
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/example/sudokuguifx/CreateHint.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/example/sudokuguifx/Utils.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/sudokuguifx/GenerateBoard.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/sudokuguifx/GenerateBoard.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/sudokuguifx/Solver.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/sudokuguifx/Solver.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/sudokuguifx/SudokuController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/sudokuguifx/SudokuController.java" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -13,8 +20,8 @@
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
       <list>
-        <option value="Class" />
         <option value="FxmlFile" />
+        <option value="Class" />
       </list>
     </option>
   </component>
@@ -175,6 +182,17 @@
     </task>
     <option name="localTasksCounter" value="12" />
     <servers />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="Major changes. Foundations of the gui created" />
