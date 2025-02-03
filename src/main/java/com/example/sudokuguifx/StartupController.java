@@ -4,19 +4,51 @@ import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Label;
+import javafx.scene.image.Image;
 import javafx.stage.Stage;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
 import java.io.IOException;
+import javafx.scene.input.MouseEvent;
+import javafx.animation.ScaleTransition;
+import javafx.util.Duration;
+import javafx.scene.image.ImageView;
+
 
 public class StartupController {
 
+    @FXML
+    private ImageView sudokuImage;
+    @FXML
+    private Label sudokuLabel;
     @FXML
     private Button startButton; // Link the start button from FXML, or you can use any UI element
     @FXML
     private ChoiceBox<String> difficultyChoiceBox; // The dropdown menu for difficulty
 
+    public void initialize() {
+        Image image = new Image(getClass().getResourceAsStream("/images/sudoku-logo.png"));
+        sudokuImage.setImage(image);
+
+        sudokuLabel.setOnMouseEntered(this::onHover);
+        sudokuLabel.setOnMouseExited(this::onExit);
+    }
+
+    private void onHover(MouseEvent event) {
+        ScaleTransition scaleUp = new ScaleTransition(Duration.millis(200), sudokuLabel);
+        scaleUp.setToX(1.2); // 20% larger
+        scaleUp.setToY(1.2);
+        scaleUp.play();
+    }
+
+    private void onExit(MouseEvent event) {
+        ScaleTransition scaleDown = new ScaleTransition(Duration.millis(200), sudokuLabel);
+        scaleDown.setToX(1.0); // Back to normal size
+        scaleDown.setToY(1.0);
+        scaleDown.play();
+    }
     @FXML
     private void handleStartGame() {
 
