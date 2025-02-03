@@ -37,4 +37,9 @@ public class Utils {
         }
         return true;
     }
+
+    // Interface for notifying the UI of updates
+    public interface SolverCallback {
+        void onCellUpdated(int row, int col, int value) throws InterruptedException;
+    }
 }

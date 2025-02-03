@@ -2,16 +2,11 @@ package com.example.sudokuguifx;
 
 public class Solver {
 
-    // Interface for notifying the UI of updates
-    public interface SolverCallback {
-        void onCellUpdated(int row, int col, int value) throws InterruptedException;
-    }
-
-    public static void solveSudoku(int[][] board, SolverCallback callback) throws InterruptedException {
+    public static void solveSudoku(int[][] board, Utils.SolverCallback callback) throws InterruptedException {
         solve(board, callback);
     }
 
-    private static boolean solve(int[][] board, SolverCallback callback) throws InterruptedException {
+    private static boolean solve(int[][] board, Utils.SolverCallback callback) throws InterruptedException {
         for(int i = 0; i < board.length; i++){
             for(int j = 0; j < board[0].length; j++){
                 if(board[i][j] == 0){
