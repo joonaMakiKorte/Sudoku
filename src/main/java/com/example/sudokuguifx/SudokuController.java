@@ -34,6 +34,7 @@ public class SudokuController {
 
     private int mistakes; // Count user mistakes
     private boolean solving = false; // Flag for checking if auto-solve is active
+    private boolean usedSolver = false; // Flag for checking if was solved with auto-solver
 
     private int difficulty; // The difficulty level passed from StartupController
     private String difficultyS; // Difficulty as a string
@@ -43,6 +44,7 @@ public class SudokuController {
     private boolean isTimerRunning = true; // Timer state
 
     private AtomicInteger tries = new AtomicInteger(3);
+    private int hints = 3;
 
     @FXML
     private GridPane gridPane;
@@ -58,16 +60,26 @@ public class SudokuController {
     private Button newGameButton;
     @FXML
     private Button solveButton;
+    @FXML
+    private Button hintButton;
 
     // Initialize images for buttons
-    // Test commit
     @FXML
     private void initialize() {
         Image lockIcon = new Image(getClass().getResource("images/lock-icon.png").toExternalForm());
+        Image hintIcon = new Image(getClass().getResource("images/light-bulb.png").toExternalForm());
+
         ImageView solveImageView = new ImageView(lockIcon);
+        ImageView hintImageView = new ImageView(hintIcon);
+
         solveImageView.setFitWidth(20);
         solveImageView.setFitHeight(20);
+
+        hintImageView.setFitWidth(20);
+        hintImageView.setFitHeight(20);
+
         solveButton.setGraphic(solveImageView);
+        hintButton.setGraphic(hintImageView);
     }
 
     // Set the difficulty level
@@ -127,17 +139,18 @@ public class SudokuController {
             pauseButton.setText("Resume");  // Update button text
             gridPane.setVisible(false); // Hide the Sudoku grid
             solveButton.setVisible(false);
+            hintButton.setVisible(false);
             difficultyLabel.setText("Game Paused"); // Show pause message
         } else {
             timer.play();  // Resume the timer
             pauseButton.setText("Pause");  // Update button text
             gridPane.setVisible(true); // Show the sudoku grid
             solveButton.setVisible(true);
+            hintButton.setVisible(true);
             difficultyLabel.setText(difficultyS);
         }
         isTimerRunning = !isTimerRunning;  // Toggle the state
     }
-
 
     private void populateGrid() {
         // Set all boxes next to each other without gaps
@@ -218,11 +231,12 @@ public class SudokuController {
 
     private void handleGameWon() {
         timer.stop(); // Stop the timer
-        pauseButton.setDisable(true); // Disable the pause button
+        pauseButton.setVisible(false); // Disable the pause button
         solveButton.setVisible(false);
+        hintButton.setVisible(false);
 
-        // Show winning message
-        difficultyLabel.setText("Congratulations, you won!");
+        // Show winning message / solved message
+        difficultyLabel.setText(usedSolver ? "Solved!" : "Congratulations, you won!");
 
         // Show the new game button
         newGameButton.setVisible(true);
@@ -273,8 +287,6 @@ public class SudokuController {
     @FXML
     private void handleSolve() {
         timer.pause();
-        pauseButton.setDisable(true);
-        solveButton.setDisable(true);
 
         // Load the password scene
         AtomicBoolean isPasswordCorrect = new AtomicBoolean(false);
@@ -315,7 +327,13 @@ public class SudokuController {
         // Disable mistake counting
         solving = true;
 
-        difficultyLabel.setText("Solving...");
+        // Disable buttons properly
+        Platform.runLater(() -> {
+            pauseButton.setDisable(true);
+            solveButton.setDisable(true);
+            hintButton.setDisable(true);
+            difficultyLabel.setText("Solving...");
+        });
 
         // Create a Task to run the solver on a background thread
         Task<Void> solverTask = new Task<Void>() {
@@ -348,8 +366,33 @@ public class SudokuController {
             }
         };
 
+        // When the solver finishes, call a method to update the UI
+        solverTask.setOnSucceeded(event -> {
+            solving = false; // Mark solving as complete
+            usedSolver = true;
+            handleGameWon(); // Call a method when solving is finished
+        });
+
         // Start the solver task
         new Thread(solverTask).start();
+    }
+
+    @FXML
+    private void handleHint() throws InterruptedException {
+        // Get random empty cell and fill with correct value from solution grid
+        CreateHint.hint(sudokuGrid,solutionGrid, (row, col, value) -> {
+            // Get the TextField at the current row and column
+            TextField textField = getTextFieldFromGridPane(col, row);
+            if (textField != null) {
+                // Update the TextField with the new value
+                textField.setText(String.valueOf(value));
+                textField.setStyle("-fx-text-fill: green; -fx-alignment: center;");
+            }
+        });
+
+        --hints;
+        hintButton.setText(String.valueOf(hints));
+        if (hints == 0) hintButton.setDisable(true);
     }
 
     // Helper method to get a TextField from a specific cell in the GridPane
