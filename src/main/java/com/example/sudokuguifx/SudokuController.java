@@ -66,8 +66,8 @@ public class SudokuController {
     // Initialize images for buttons
     @FXML
     private void initialize() {
-        Image lockIcon = new Image(getClass().getResource("images/lock-icon.png").toExternalForm());
-        Image hintIcon = new Image(getClass().getResource("images/light-bulb.png").toExternalForm());
+        Image lockIcon = new Image(getClass().getResourceAsStream("/images/lock-icon.png"));
+        Image hintIcon = new Image(getClass().getResourceAsStream("/images/light-bulb.png"));
 
         ImageView solveImageView = new ImageView(lockIcon);
         ImageView hintImageView = new ImageView(hintIcon);
