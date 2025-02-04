@@ -6,7 +6,6 @@
 <?import javafx.collections.FXCollections?>
 <?import java.lang.String?>
 <?import javafx.scene.control.Label?>
-<?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 
 <VBox xmlns:fx="http://javafx.com/fxml" fx:controller="com.example.sudokuguifx.StartupController" alignment="CENTER" spacing="15" style="-fx-padding: 0 0 50 0;">
@@ -20,7 +19,7 @@
     </VBox>
 
     <!-- Dropdown menu for selecting difficulty -->
-    <ChoiceBox fx:id="difficultyChoiceBox" prefWidth="100" prefHeight="40" value="Easy" style="-fx-font-size: 20px;">
+    <ChoiceBox fx:id="difficultyChoiceBox" prefWidth="150" prefHeight="40" value="New Game" style="-fx-font-size: 20px;">
         <items>
             <FXCollections fx:factory="observableArrayList">
                 <String fx:value="Easy"/>
@@ -31,7 +30,6 @@
         </items>
     </ChoiceBox>
 
-    <!-- Start and Exit Buttons -->
-    <Button fx:id="startButton" text="Start Game" prefWidth="140" prefHeight="40" style="-fx-font-size: 20px;" onAction="#handleStartGame"/>
-    <Button text="Exit" prefWidth="100" prefHeight="40" style="-fx-font-size: 20px;" onAction="#handleExit"/>
+    <!--Buttons -->
+    <Button fx:id="exitButton" text="Exit" prefWidth="100" prefHeight="40" style="-fx-font-size: 20px;" onAction="#handleExit"/>
 </VBox>
