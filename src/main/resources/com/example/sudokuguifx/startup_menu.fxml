@@ -7,29 +7,57 @@
 <?import java.lang.String?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.BorderPane?>
 
-<VBox xmlns:fx="http://javafx.com/fxml" fx:controller="com.example.sudokuguifx.StartupController" alignment="CENTER" spacing="15" style="-fx-padding: 0 0 50 0;">
+<BorderPane xmlns:fx="http://javafx.com/fxml" fx:controller="com.example.sudokuguifx.StartupController">
 
-    <VBox alignment="CENTER" style="-fx-padding: 0 0 80 0;">
-        <!-- Image on top of the label -->
-        <ImageView fx:id="sudokuImage" fitWidth="100" fitHeight="100"/>
+    <!-- Button in the top-left corner -->
+    <top>
+        <HBox alignment="TOP_LEFT" style="-fx-padding: 5 0 0 5" spacing="5">
+            <!-- Dropdown menu for selecting difficulty -->
+            <ChoiceBox fx:id="themeChoiceBox" prefWidth="80" prefHeight="30" value="Theme" style="-fx-font-size: 15px;">
+                <items>
+                    <FXCollections fx:factory="observableArrayList">
+                        <String fx:value="Light"/>
+                        <String fx:value="Dark"/>
+                    </FXCollections>
+                </items>
+            </ChoiceBox>
 
-        <!-- Sudoku Title Label-->
-        <Label fx:id="sudokuLabel" text="SUDOKU" style="-fx-font-size: 40px; -fx-font-weight: bold;"/>
-    </VBox>
+            <!-- Display theme icon -->
+            <ImageView fx:id="themeImage" fitWidth="30" fitHeight="30"/>
+        </HBox>
+    </top>
 
-    <!-- Dropdown menu for selecting difficulty -->
-    <ChoiceBox fx:id="difficultyChoiceBox" prefWidth="150" prefHeight="40" value="New Game" style="-fx-font-size: 20px;">
-        <items>
-            <FXCollections fx:factory="observableArrayList">
-                <String fx:value="Easy"/>
-                <String fx:value="Medium"/>
-                <String fx:value="Hard"/>
-                <String fx:value="Extreme"/>
-            </FXCollections>
-        </items>
-    </ChoiceBox>
+    <!-- Centered VBox -->
+    <center>
+        <VBox alignment="CENTER" spacing="15" style="-fx-padding: 0 0 50 0;">
 
-    <!--Buttons -->
-    <Button fx:id="exitButton" text="Exit" prefWidth="100" prefHeight="40" style="-fx-font-size: 20px;" onAction="#handleExit"/>
-</VBox>
+            <VBox alignment="CENTER" style="-fx-padding: 0 0 80 0;">
+                <!-- Image on top of the label -->
+                <ImageView fx:id="sudokuImage" fitWidth="100" fitHeight="100"/>
+
+                <!-- Sudoku Title Label-->
+                <Label fx:id="sudokuLabel" text="SUDOKU"/>
+            </VBox>
+
+            <!-- Dropdown menu for selecting difficulty -->
+            <ChoiceBox fx:id="difficultyChoiceBox" prefWidth="150" prefHeight="40" value="New Game" style="-fx-font-size: 20px;">
+                <items>
+                    <FXCollections fx:factory="observableArrayList">
+                        <String fx:value="Easy"/>
+                        <String fx:value="Medium"/>
+                        <String fx:value="Hard"/>
+                        <String fx:value="Extreme"/>
+                    </FXCollections>
+                </items>
+            </ChoiceBox>
+
+            <!-- Buttons -->
+            <Button fx:id="exitButton" text="Exit" prefWidth="100" prefHeight="40" style="-fx-font-size: 20px;" onAction="#handleExit"/>
+
+        </VBox>
+    </center>
+
+</BorderPane>

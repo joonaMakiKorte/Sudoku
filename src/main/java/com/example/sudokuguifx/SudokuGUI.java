@@ -1,10 +1,9 @@
 package com.example.sudokuguifx;
 
-import javafx.application.Application;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Scene;
-import javafx.stage.Stage;
-import javafx.scene.Parent;
+import javafx.application.*;
+import javafx.fxml.*;
+import javafx.scene.*;
+import javafx.stage.*;
 
 public class SudokuGUI extends Application {
 
@@ -14,8 +13,12 @@ public class SudokuGUI extends Application {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("startup_menu.fxml"));
         Parent root = loader.load();
 
-        // Create the scene and set it on the stage
+        // Create the scene and pass to controller
         Scene scene = new Scene(root, 600, 600);
+        StartupController controller = loader.getController();
+        controller.setScene(scene);
+
+        // Set the scene
         primaryStage.setTitle("New Game");
         primaryStage.setScene(scene);
         primaryStage.show();
