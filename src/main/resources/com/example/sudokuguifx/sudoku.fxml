@@ -9,7 +9,7 @@
 <VBox spacing="10" alignment="CENTER" xmlns:fx="http://javafx.com/fxml" fx:controller="com.example.sudokuguifx.SudokuController">
 
     <!--Difficulty label-->
-    <Label fx:id="difficultyLabel" text="Easy" style="-fx-font-size: 22px;" />
+    <Label fx:id="difficultyLabel" text="Easy" style="-fx-font-size: 30px; -fx-font-weight: bold;"/>
 
     <!--Timer and mistakes-->
     <HBox spacing="20" alignment="CENTER">

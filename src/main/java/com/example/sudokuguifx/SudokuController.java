@@ -352,7 +352,7 @@ public class SudokuController {
                         }
 
                         // Introduce a delay of 500 milliseconds
-                        PauseTransition pause = new PauseTransition(Duration.millis(5));
+                        PauseTransition pause = new PauseTransition(Duration.millis(1));
                         pause.setOnFinished(event -> {
                             // Continue solving after the delay
                         });
@@ -360,7 +360,7 @@ public class SudokuController {
                     });
 
                     // Introduce a delay in the background thread
-                    Thread.sleep(5);
+                    Thread.sleep(1);
                 });
                 return null;
             }
