@@ -16,7 +16,7 @@ public class SudokuGUI extends Application {
         // Create the scene and pass to controller
         Scene scene = new Scene(root, 600, 600);
         StartupController controller = loader.getController();
-        controller.setScene(scene);
+        controller.passScene(scene,false);
 
         // Set the scene
         primaryStage.setTitle("New Game");

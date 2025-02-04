@@ -36,6 +36,8 @@ public class SudokuController {
     private AtomicInteger tries = new AtomicInteger(3);
     private int hints = 3;
 
+    private boolean dark; // Flag indicating theme
+
     @FXML
     private GridPane gridPane;
     @FXML
@@ -70,6 +72,20 @@ public class SudokuController {
 
         solveButton.setGraphic(solveImageView);
         hintButton.setGraphic(hintImageView);
+
+        difficultyLabel.setFont(Font.font("",FontWeight.BOLD,30));
+        timerLabel.setFont(Font.font("",FontWeight.SEMI_BOLD,20));
+        mistakesLabel.setFont(Font.font("",FontWeight.SEMI_BOLD,20));
+    }
+
+    public void setTheme(Scene scene, boolean dark) {
+        this.dark = dark;
+
+        // Style elements by theme
+        scene.getRoot().setStyle(dark ? "-fx-background-color: rgb(42,43,42);" : "-fx-background-color: whitesmoke");
+        difficultyLabel.setStyle(dark ? "-fx-text-fill: white;" : "-fx-text-fill: black");
+        timerLabel.setStyle(dark ? "-fx-text-fill: white;" : "-fx-text-fill: black");
+        mistakesLabel.setStyle(dark ? "-fx-text-fill: white;" : "-fx-text-fill: black");
     }
 
     // Set the difficulty level
@@ -155,6 +171,7 @@ public class SudokuController {
                 textField.setPrefSize(50,50); // Uniform cell size
                 textField.setFont(Font.font("Verdana", 20));
                 textField.setAlignment(Pos.CENTER);
+                textField.setStyle(this.dark ? "-fx-text-fill: white; -fx-background-color: rgb(35,36,46);" : "-fx-text-fill: black; -fx-background-color: white;");
 
                 // Apply Borders for 3x3 Sub-boxes
                 int top = (row % 3 == 0) ? 2 : 1;
@@ -192,11 +209,16 @@ public class SudokuController {
                                 if (sudokuGrid[currentRow][currentCol] == solutionGrid[currentRow][currentCol]) {
                                     // Correct value entered, make the TextField non-editable
                                     textField.setEditable(false);
-                                    textField.setStyle("-fx-text-fill: green");
+                                    textField.setStyle(this.dark ? "-fx-text-fill: blue; -fx-background-color: rgb(35,36,46);" : "-fx-text-fill: green; -fx-background-color: white;");
                                 } else {
-                                    textField.setStyle("-fx-text-fill: red");
+                                    textField.setStyle("-fx-text-fill: red; "  + (this.dark ? "-fx-background-color: rgb(35,36,46);" : "-fx-background-color: white;"));
                                     if (!solving) mistakes++; // wrong input -> a strike
                                     mistakesLabel.setText("Mistakes " + mistakes + "/3");
+
+                                    // Clear invalid input after a small delay
+                                    PauseTransition pause = new PauseTransition(Duration.seconds(0.5));
+                                    pause.setOnFinished(event -> textField.setText(""));
+                                    pause.play();
                                 }
 
                                 // Check if game grid and solution grid match -> game won
@@ -205,7 +227,7 @@ public class SudokuController {
                                 if (mistakes==3) handleGameLost();
                             } else {
                                 sudokuGrid[currentRow][currentCol] = 0;
-                                textField.setStyle("-fx-text-fill: black");
+                                textField.setStyle(this.dark ? "-fx-text-fill: white; -fx-background-color: rgb(35,36,46);" : "-fx-text-fill: black; -fx-background-color: white;");
                             }
                         } else {
                             textField.setText(oldValue); // Restore old value if input is invalid
@@ -236,6 +258,8 @@ public class SudokuController {
         timer.stop();
         pauseButton.setVisible(false);
         solveButton.setVisible(false);
+        hintButton.setVisible(false);
+        solving = true;
 
         // Show losing message
         difficultyLabel.setText("Game Over!");
@@ -251,9 +275,16 @@ public class SudokuController {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("startup_menu.fxml"));
             Parent root = loader.load();
 
+            // Get the controller for startup
+            StartupController startupController = loader.getController();
+
             // Get the current stage using the button that triggered the event
             Stage stage = (Stage) newGameButton.getScene().getWindow();
             Scene scene = new Scene(root, 600, 600);
+
+            // Pass the scene and theme to startup
+            startupController.passScene(scene,this.dark);
+
             stage.setTitle("New Game");
             stage.setScene(scene);
         } catch (IOException e) {
@@ -277,6 +308,7 @@ public class SudokuController {
     @FXML
     private void handleSolve() {
         timer.pause();
+        solveButton.setDisable(true);
 
         // Load the password scene
         AtomicBoolean isPasswordCorrect = new AtomicBoolean(false);
@@ -327,6 +359,7 @@ public class SudokuController {
 
         // Create a Task to run the solver on a background thread
         Task<Void> solverTask = new Task<Void>() {
+
             @Override
             protected Void call() throws Exception {
                 // Solve the puzzle and pass a callback to update the UI
@@ -338,7 +371,7 @@ public class SudokuController {
                         if (textField != null) {
                             // Update the TextField with the new value
                             textField.setText(value == 0 ? "" : String.valueOf(value));
-                            textField.setStyle("-fx-text-fill: blue; -fx-alignment: center;"); // Mark as in-progress
+                            textField.setStyle(dark ? "-fx-text-fill: green; -fx-background-color: rgb(35,36,46);" : "-fx-text-fill: blue; -fx-background-color: white;"); // Mark as in-progress
                         }
 
                         // Introduce a delay of 500 milliseconds
@@ -376,7 +409,7 @@ public class SudokuController {
             if (textField != null) {
                 // Update the TextField with the new value
                 textField.setText(String.valueOf(value));
-                textField.setStyle("-fx-text-fill: green; -fx-alignment: center;");
+                textField.setStyle(this.dark ? "-fx-text-fill: yellow; -fx-background-color: rgb(35,36,46);" : "-fx-text-fill: yellow; -fx-background-color: white;");
             }
         });
 
