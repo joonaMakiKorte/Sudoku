@@ -19,8 +19,6 @@ public class PasswordController {
     private PasswordField passwordField;
     @FXML
     private Button passwordEnter;
-    @FXML
-    private Button cancelButton;
 
     public void setPasswordCorrect(AtomicBoolean passwordCorrect, AtomicInteger tries) {
         this.passwordCorrect = passwordCorrect;

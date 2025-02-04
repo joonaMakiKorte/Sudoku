@@ -8,6 +8,7 @@ import javafx.scene.image.*;
 import javafx.scene.text.*;
 import javafx.stage.*;
 import java.io.*;
+import java.util.Objects;
 import javafx.animation.*;
 import javafx.util.*;
 import javafx.scene.paint.*;
@@ -38,15 +39,14 @@ public class StartupController {
     @FXML
     public void initialize() {
         // Sudoku logo
-        Image image = new Image(getClass().getResourceAsStream("/images/sudoku-logo.png"));
+        Image image = new Image(Objects.requireNonNull(getClass().getResourceAsStream("/images/sudoku-logo.png")));
         sudokuImage.setImage(image);
 
         // Light/dark theme icons
-        this.lightImage = new Image(getClass().getResourceAsStream("/images/light-icon.png"));
-        this.darkImage = new Image(getClass().getResourceAsStream("/images/dark-icon.png"));
+        this.lightImage = new Image(Objects.requireNonNull(getClass().getResourceAsStream("/images/light-icon.png")));
+        this.darkImage = new Image(Objects.requireNonNull(getClass().getResourceAsStream("/images/dark-icon.png")));
 
-        // By default, display light icon
-        themeImage.setImage(this.lightImage);
+        themeImage.setImage(dark ? this.darkImage : this.lightImage);
 
         // Set effect for sudoku label
         setupScaleTransition(sudokuLabel);
@@ -62,9 +62,9 @@ public class StartupController {
         themeChoiceBox.setOnAction(e -> handleSetTheme());
     }
 
-    public void setScene(Scene scene) {
+    public void passScene(Scene scene, boolean dark) {
         this.scene = scene;
-        this.dark = false;
+        this.dark = dark;
     }
 
     private void setupScaleTransition(Node element) {
@@ -111,9 +111,9 @@ public class StartupController {
     }
 
     private void handleSetTheme() {
-        dark = !dark;
+        this.dark = themeChoiceBox.getValue().equals("Dark");
 
-        scene.getRoot().setStyle(dark ? "-fx-background-color: rgb(42,43,42);" : "-fx-background-color: white");
+        scene.getRoot().setStyle(dark ? "-fx-background-color: rgb(42,43,42);" : "-fx-background-color: whitesmoke");
         sudokuLabel.setStyle(dark ? "-fx-text-fill: white;" : "-fx-text-fill: black");
         themeImage.setImage(dark ? this.darkImage : this.lightImage);
     }
@@ -135,13 +135,19 @@ public class StartupController {
 
             // Get the controller for the Sudoku scene
             SudokuController sudokuController = loader.getController();
-            // Pass the difficulty to the SudokuController
-            sudokuController.setDifficulty(selectedDifficulty);
-            sudokuController.initializeBoard();
 
             // Get the current stage using the button that triggered the event
             Stage stage = (Stage) exitButton.getScene().getWindow();
             Scene scene = new Scene(root, 600, 600);
+
+            // Pass the selected theme and scene
+            sudokuController.setTheme(scene,this.dark);
+
+            // Initialize the sudoku board
+            sudokuController.setDifficulty(selectedDifficulty);
+            sudokuController.initializeBoard();
+
+            // Set the scene
             stage.setTitle("Sudoku");
             stage.setScene(scene);
         } catch (IOException e) {
