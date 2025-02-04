@@ -1,31 +1,21 @@
 package com.example.sudokuguifx;
 
-import javafx.application.Platform;
-import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.geometry.Insets;
-import javafx.geometry.Pos;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.TextField;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
+import javafx.application.*;
+import javafx.fxml.*;
+import javafx.geometry.*;
+import javafx.scene.*;
+import javafx.scene.control.*;
+import javafx.scene.image.*;
 import javafx.scene.layout.*;
-import javafx.scene.paint.Color;
-import javafx.scene.text.Font;
-import javafx.animation.KeyFrame;
-import javafx.animation.Timeline;
-import javafx.scene.control.Label;
-import javafx.stage.Modality;
-import javafx.stage.Stage;
-import javafx.util.Duration;
-import java.io.IOException;
+import javafx.scene.paint.*;
+import javafx.scene.text.*;
+import javafx.animation.*;
+import javafx.stage.*;
+import javafx.util.*;
+import javafx.concurrent.*;
 import java.util.Arrays;
-import java.util.concurrent.atomic.AtomicBoolean;
-import java.util.concurrent.atomic.AtomicInteger;
-import javafx.concurrent.Task;
-import javafx.animation.PauseTransition;
+import java.util.concurrent.atomic.*;
+import java.io.*;
 
 public class SudokuController {
 

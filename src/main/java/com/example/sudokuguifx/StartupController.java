@@ -1,42 +1,56 @@
 package com.example.sudokuguifx;
 
-import javafx.application.Platform;
-import javafx.fxml.FXML;
-import javafx.scene.Node;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
-import javafx.scene.control.Label;
-import javafx.scene.image.Image;
-import javafx.stage.Stage;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.control.Button;
-import javafx.scene.control.ChoiceBox;
-import java.io.IOException;
-import javafx.animation.ScaleTransition;
-import javafx.util.Duration;
-import javafx.scene.image.ImageView;
-import javafx.scene.paint.Color;
-import javafx.scene.effect.DropShadow;
+import javafx.application.*;
+import javafx.fxml.*;
+import javafx.scene.control.*;
+import javafx.scene.*;
+import javafx.scene.image.*;
+import javafx.scene.text.*;
+import javafx.stage.*;
+import java.io.*;
+import javafx.animation.*;
+import javafx.util.*;
+import javafx.scene.paint.*;
+import javafx.scene.effect.*;
 
 
 public class StartupController {
 
+    private Scene scene;
+    private boolean dark; // Flag indicating theme
+
     @FXML
     private ImageView sudokuImage;
+    @FXML
+    private ImageView themeImage;
     @FXML
     private Label sudokuLabel;
     @FXML
     private ChoiceBox<String> difficultyChoiceBox; // The dropdown menu for difficulty
     @FXML
+    private ChoiceBox<String> themeChoiceBox;
+    @FXML
     private Button exitButton;
 
+    private Image lightImage;
+    private Image darkImage;
+
+    @FXML
     public void initialize() {
         // Sudoku logo
         Image image = new Image(getClass().getResourceAsStream("/images/sudoku-logo.png"));
         sudokuImage.setImage(image);
 
+        // Light/dark theme icons
+        this.lightImage = new Image(getClass().getResourceAsStream("/images/light-icon.png"));
+        this.darkImage = new Image(getClass().getResourceAsStream("/images/dark-icon.png"));
+
+        // By default, display light icon
+        themeImage.setImage(this.lightImage);
+
         // Set effect for sudoku label
         setupScaleTransition(sudokuLabel);
+        sudokuLabel.setFont(Font.font("",FontWeight.BOLD,40));
 
         // Set effect for difficulty choice
         setupHoverEffect(difficultyChoiceBox, Color.DARKGREEN);
@@ -44,6 +58,13 @@ public class StartupController {
 
         // Set effect for exit button
         setupHoverEffect(exitButton, Color.DARKRED);
+
+        themeChoiceBox.setOnAction(e -> handleSetTheme());
+    }
+
+    public void setScene(Scene scene) {
+        this.scene = scene;
+        this.dark = false;
     }
 
     private void setupScaleTransition(Node element) {
@@ -89,6 +110,14 @@ public class StartupController {
         });
     }
 
+    private void handleSetTheme() {
+        dark = !dark;
+
+        scene.getRoot().setStyle(dark ? "-fx-background-color: rgb(42,43,42);" : "-fx-background-color: white");
+        sudokuLabel.setStyle(dark ? "-fx-text-fill: white;" : "-fx-text-fill: black");
+        themeImage.setImage(dark ? this.darkImage : this.lightImage);
+    }
+
     @FXML
     private void handleStartGame() {
 
@@ -111,7 +140,7 @@ public class StartupController {
             sudokuController.initializeBoard();
 
             // Get the current stage using the button that triggered the event
-            Stage stage = (Stage) difficultyChoiceBox.getScene().getWindow();
+            Stage stage = (Stage) exitButton.getScene().getWindow();
             Scene scene = new Scene(root, 600, 600);
             stage.setTitle("Sudoku");
             stage.setScene(scene);
@@ -123,7 +152,7 @@ public class StartupController {
     @FXML
     private void handleExit() {
         // Get the current stage using the button (or any UI element) and close the application
-        Stage stage = (Stage) difficultyChoiceBox.getScene().getWindow();
+        Stage stage = (Stage) exitButton.getScene().getWindow();
         stage.close();
 
         // Ensure all JavaFX processes are stopped
