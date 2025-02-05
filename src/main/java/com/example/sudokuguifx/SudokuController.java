@@ -55,7 +55,6 @@ public class SudokuController {
     @FXML
     private Button hintButton;
 
-    // Initialize images for buttons
     @FXML
     private void initialize() {
         Image lockIcon = new Image(getClass().getResourceAsStream("/images/lock-icon.png"));
@@ -171,7 +170,8 @@ public class SudokuController {
                 textField.setPrefSize(50,50); // Uniform cell size
                 textField.setFont(Font.font("Verdana", 20));
                 textField.setAlignment(Pos.CENTER);
-                textField.setStyle(this.dark ? "-fx-text-fill: white; -fx-background-color: rgb(35,36,46);" : "-fx-text-fill: black; -fx-background-color: white;");
+                textField.setStyle(this.dark ? "-fx-text-fill: white; " + Utils.getBackground(row,col,true) :
+                        "-fx-text-fill: black; " + Utils.getBackground(row,col,false));
 
                 // Apply Borders for 3x3 Sub-boxes
                 int top = (row % 3 == 0) ? 2 : 1;
@@ -209,16 +209,18 @@ public class SudokuController {
                                 if (sudokuGrid[currentRow][currentCol] == solutionGrid[currentRow][currentCol]) {
                                     // Correct value entered, make the TextField non-editable
                                     textField.setEditable(false);
-                                    textField.setStyle(this.dark ? "-fx-text-fill: blue; -fx-background-color: rgb(35,36,46);" : "-fx-text-fill: green; -fx-background-color: white;");
+                                    textField.setStyle(this.dark ? "-fx-text-fill: lightskyblue; " + Utils.getBackground(currentRow,currentCol,true) :
+                                            "-fx-text-fill: green; " + Utils.getBackground(currentRow,currentCol,false));
                                 } else {
-                                    textField.setStyle("-fx-text-fill: red; "  + (this.dark ? "-fx-background-color: rgb(35,36,46);" : "-fx-background-color: white;"));
-                                    if (!solving) mistakes++; // wrong input -> a strike
+                                    textField.setStyle("-fx-text-fill: red; "  + Utils.getBackground(currentRow,currentCol,this.dark));
+                                    if (!solving) {
+                                        mistakes++; // wrong input -> a strike
+                                        // Clear invalid input after a small delay
+                                        PauseTransition pause = new PauseTransition(Duration.seconds(0.5));
+                                        pause.setOnFinished(event -> textField.setText(""));
+                                        pause.play();
+                                    }
                                     mistakesLabel.setText("Mistakes " + mistakes + "/3");
-
-                                    // Clear invalid input after a small delay
-                                    PauseTransition pause = new PauseTransition(Duration.seconds(0.5));
-                                    pause.setOnFinished(event -> textField.setText(""));
-                                    pause.play();
                                 }
 
                                 // Check if game grid and solution grid match -> game won
@@ -227,7 +229,8 @@ public class SudokuController {
                                 if (mistakes==3) handleGameLost();
                             } else {
                                 sudokuGrid[currentRow][currentCol] = 0;
-                                textField.setStyle(this.dark ? "-fx-text-fill: white; -fx-background-color: rgb(35,36,46);" : "-fx-text-fill: black; -fx-background-color: white;");
+                                textField.setStyle(this.dark ? "-fx-text-fill: white; " + Utils.getBackground(currentRow,currentCol,true) :
+                                        "-fx-text-fill: black; " + Utils.getBackground(currentRow,currentCol,false));
                             }
                         } else {
                             textField.setText(oldValue); // Restore old value if input is invalid
@@ -340,9 +343,7 @@ public class SudokuController {
         }
 
         // If tries left un-disable the solve button
-        if (tries.get() != 0) {
-            solveButton.setDisable(false);
-        }
+        if (tries.get() != 0) solveButton.setDisable(false);
     }
 
     private void activateSolve() {
@@ -371,7 +372,8 @@ public class SudokuController {
                         if (textField != null) {
                             // Update the TextField with the new value
                             textField.setText(value == 0 ? "" : String.valueOf(value));
-                            textField.setStyle(dark ? "-fx-text-fill: green; -fx-background-color: rgb(35,36,46);" : "-fx-text-fill: blue; -fx-background-color: white;"); // Mark as in-progress
+                            textField.setStyle(dark ? "-fx-text-fill: green; " + Utils.getBackground(row,col,true) :
+                                    "-fx-text-fill: blue; " + Utils.getBackground(row,col,false)); // Mark as in-progress
                         }
 
                         // Introduce a delay of 500 milliseconds
@@ -409,7 +411,8 @@ public class SudokuController {
             if (textField != null) {
                 // Update the TextField with the new value
                 textField.setText(String.valueOf(value));
-                textField.setStyle(this.dark ? "-fx-text-fill: yellow; -fx-background-color: rgb(35,36,46);" : "-fx-text-fill: yellow; -fx-background-color: white;");
+                textField.setStyle(dark ? "-fx-text-fill: yellow; " + Utils.getBackground(row,col,true) :
+                        "-fx-text-fill: rgb(222,132,35); " + Utils.getBackground(col,row,false));
             }
         });
 

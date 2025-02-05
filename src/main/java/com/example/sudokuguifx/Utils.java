@@ -42,4 +42,16 @@ public class Utils {
     public interface SolverCallback {
         void onCellUpdated(int row, int col, int value) throws InterruptedException;
     }
+
+    // Get cell background color depending on theme and coordinates
+    public static String getBackground(int row, int col, boolean dark) {
+        boolean isEven = evenBox(row,col);
+        return isEven ? (dark ? "-fx-background-color: rgb(35,36,46);" : "-fx-background-color: white;") :
+                (dark ? "-fx-background-color: rgb(44,43,64);" : "-fx-background-color: rgb(225,237,250);");
+    }
+
+    // Returns if box idx is odd or even
+    private static boolean evenBox(int row, int col) {
+        return ((row/3)*3+(col/3))%2 == 0;
+    }
 }
