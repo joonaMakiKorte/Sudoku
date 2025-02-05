@@ -65,6 +65,8 @@ public class StartupController {
     public void passScene(Scene scene, boolean dark) {
         this.scene = scene;
         this.dark = dark;
+
+        changeTheme();
     }
 
     private void setupScaleTransition(Node element) {
@@ -110,12 +112,15 @@ public class StartupController {
         });
     }
 
-    private void handleSetTheme() {
-        this.dark = themeChoiceBox.getValue().equals("Dark");
-
+    private void changeTheme() {
         scene.getRoot().setStyle(dark ? "-fx-background-color: rgb(42,43,42);" : "-fx-background-color: whitesmoke");
         sudokuLabel.setStyle(dark ? "-fx-text-fill: white;" : "-fx-text-fill: black");
         themeImage.setImage(dark ? this.darkImage : this.lightImage);
+    }
+
+    private void handleSetTheme() {
+        this.dark = themeChoiceBox.getValue().equals("Dark");
+        changeTheme();
     }
 
     @FXML
