@@ -30,12 +30,12 @@
             <Button fx:id="solveButton" prefWidth="40" prefHeight="40" style="-fx-font-size: 15px;" onAction="#handleSolve"/>
             <Button fx:id="hintButton" text="3" prefWidth="40" prefHeight="40" style="-fx-font-size: 15px;" onAction="#handleHint"/>
 
-            <Region prefWidth="5"/>
+            <Region prefWidth="52"/>
             <Button fx:id="newGameButton" text="New Game" prefWidth="100" prefHeight="40" style="-fx-font-size: 15px;" visible="false" onAction="#handleNewGame"/>
-            <Region prefWidth="7"/>
+            <Region prefWidth="38"/>
 
-            <Button fx:id="pauseButton" text="Pause" prefWidth="75" prefHeight="40" style="-fx-font-size: 15px;" onAction="#toggleTimer"/>
-            <Button text="Exit" prefWidth="60" prefHeight="40" style="-fx-font-size: 15px;" onAction="#handleExit"/>
+            <Button fx:id="pauseButton" prefWidth="47" prefHeight="40" onAction="#toggleTimer"/>
+            <Button fx:id="quitButton" text="Quit" prefWidth="60" prefHeight="40" style="-fx-font-size: 15px;" onAction="#handleExit"/>
         </HBox>
     </bottom>
 </BorderPane>

@@ -51,17 +51,27 @@ public class SudokuController {
     @FXML
     private Button newGameButton;
     @FXML
+    private Button quitButton;
+    @FXML
     private Button solveButton;
     @FXML
     private Button hintButton;
+    @FXML
+    private ImageView pauseImage;
+    @FXML
+    private ImageView resumeImage;
 
     @FXML
     private void initialize() {
         Image lockIcon = new Image(getClass().getResourceAsStream("/images/lock-icon.png"));
         Image hintIcon = new Image(getClass().getResourceAsStream("/images/light-bulb.png"));
+        Image pauseIcon = new Image(getClass().getResourceAsStream("/images/pause-logo.png"));
+        Image resumeIcon = new Image(getClass().getResourceAsStream("/images/resume-logo.png"));
 
         ImageView solveImageView = new ImageView(lockIcon);
         ImageView hintImageView = new ImageView(hintIcon);
+        this.pauseImage = new ImageView(pauseIcon);
+        this.resumeImage = new ImageView(resumeIcon);
 
         solveImageView.setFitWidth(20);
         solveImageView.setFitHeight(20);
@@ -69,8 +79,15 @@ public class SudokuController {
         hintImageView.setFitWidth(20);
         hintImageView.setFitHeight(20);
 
+        this.pauseImage.setFitWidth(25);
+        this.pauseImage.setFitHeight(25);
+
+        this.resumeImage.setFitWidth(30);
+        this.resumeImage.setFitHeight(30);
+
         solveButton.setGraphic(solveImageView);
         hintButton.setGraphic(hintImageView);
+        pauseButton.setGraphic(this.pauseImage);
 
         difficultyLabel.setFont(Font.font("",FontWeight.BOLD,30));
         timerLabel.setFont(Font.font("",FontWeight.SEMI_BOLD,20));
@@ -85,6 +102,16 @@ public class SudokuController {
         difficultyLabel.setStyle(dark ? "-fx-text-fill: white;" : "-fx-text-fill: black");
         timerLabel.setStyle(dark ? "-fx-text-fill: white;" : "-fx-text-fill: black");
         mistakesLabel.setStyle(dark ? "-fx-text-fill: white;" : "-fx-text-fill: black");
+        solveButton.setStyle(dark ? "-fx-background-color: gray;" +
+                " -fx-background-radius: 5; -fx-border-radius: 5; -fx-border-color: black;" : "");
+        hintButton.setStyle("-fx-font-size: 15px; " + (dark ? "-fx-background-color: gray;" +
+                " -fx-background-radius: 5; -fx-border-radius: 5; -fx-border-color: black;" : ""));
+        newGameButton.setStyle("-fx-font-size: 15px; " + (dark ? "-fx-background-color: gray;" +
+                " -fx-background-radius: 5; -fx-border-radius: 5; -fx-border-color: black;" : ""));
+        pauseButton.setStyle(dark ? "-fx-background-color: gray;" +
+                " -fx-background-radius: 5; -fx-border-radius: 5; -fx-border-color: black;" : "");
+        quitButton.setStyle("-fx-font-size: 15px; " + (dark ? "-fx-background-color: gray;" +
+                " -fx-background-radius: 5; -fx-border-radius: 5; -fx-border-color: black;" : ""));
     }
 
     // Set the difficulty level
@@ -141,14 +168,14 @@ public class SudokuController {
     private void toggleTimer() {
         if (isTimerRunning) {
             timer.pause();  // Pause the timer
-            pauseButton.setText("Resume");  // Update button text
+            pauseButton.setGraphic(this.resumeImage);  // Update button image
             gridPane.setVisible(false); // Hide the Sudoku grid
             solveButton.setVisible(false);
             hintButton.setVisible(false);
             difficultyLabel.setText("Game Paused"); // Show pause message
         } else {
             timer.play();  // Resume the timer
-            pauseButton.setText("Pause");  // Update button text
+            pauseButton.setGraphic(this.pauseImage);  // Update button text
             gridPane.setVisible(true); // Show the sudoku grid
             solveButton.setVisible(true);
             hintButton.setVisible(true);
