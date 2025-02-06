@@ -11,8 +11,6 @@ import java.io.*;
 import java.util.Objects;
 import javafx.animation.*;
 import javafx.util.*;
-import javafx.scene.paint.*;
-import javafx.scene.effect.*;
 
 
 public class StartupController {
@@ -46,18 +44,19 @@ public class StartupController {
         this.lightImage = new Image(Objects.requireNonNull(getClass().getResourceAsStream("/images/light-icon.png")));
         this.darkImage = new Image(Objects.requireNonNull(getClass().getResourceAsStream("/images/dark-icon.png")));
 
-        themeImage.setImage(dark ? this.darkImage : this.lightImage);
+        themeImage.setImage(dark ? darkImage : lightImage);
 
         // Set effect for sudoku label
         setupScaleTransition(sudokuLabel);
         sudokuLabel.setFont(Font.font("",FontWeight.BOLD,40));
 
         // Set effect for difficulty choice
-        setupHoverEffect(difficultyChoiceBox, Color.DARKGREEN);
+        setupHoverEffect(difficultyChoiceBox);
         difficultyChoiceBox.setOnAction(e -> handleStartGame());
 
         // Set effect for exit button
-        setupHoverEffect(exitButton, Color.DARKRED);
+        setupHoverEffect(exitButton);
+        exitButton.setFont(Font.font("",FontWeight.NORMAL,20));
 
         themeChoiceBox.setOnAction(e -> handleSetTheme());
     }
@@ -86,12 +85,7 @@ public class StartupController {
         element.setOnMouseExited(e -> scaleDown.playFromStart());
     }
 
-    private void setupHoverEffect(Node element, Color shadowColor) {
-        // Shadow effect
-        DropShadow shadow = new DropShadow();
-        shadow.setColor(shadowColor);
-        shadow.setRadius(10);
-
+    private void setupHoverEffect(Node element) {
         // Scale transition for smooth hover effect
         ScaleTransition hoverIn = new ScaleTransition(Duration.millis(200), element);
         hoverIn.setToX(1.1);
@@ -104,18 +98,21 @@ public class StartupController {
         // Apply hover behavior
         element.setOnMouseEntered(e -> {
             hoverIn.playFromStart();
-            element.setEffect(shadow);
         });
         element.setOnMouseExited(e -> {
             hoverOut.playFromStart();
-            element.setEffect(null);
         });
     }
 
     private void changeTheme() {
-        scene.getRoot().setStyle(dark ? "-fx-background-color: rgb(42,43,42);" : "-fx-background-color: whitesmoke");
+        scene.getRoot().setStyle(dark ? "-fx-background-color: rgb(42,43,42);" : "-fx-background-color: whitesmoke;");
         sudokuLabel.setStyle(dark ? "-fx-text-fill: white;" : "-fx-text-fill: black");
-        themeImage.setImage(dark ? this.darkImage : this.lightImage);
+        themeImage.setImage(dark ? darkImage : lightImage);
+        themeChoiceBox.setStyle("-fx-font-size: 15px; " + (dark ? "-fx-background-color: gray;" +
+                " -fx-background-radius: 5; -fx-border-radius: 5; -fx-border-color: black;" : ""));
+        difficultyChoiceBox.setStyle("-fx-font-size: 20px; " + (dark ? "-fx-background-color: gray;" +
+                " -fx-background-radius: 5; -fx-border-radius: 5; -fx-border-color: black;" : ""));
+        exitButton.setStyle(dark ? "-fx-background-color: gray; -fx-background-radius: 5; -fx-border-radius: 5; -fx-border-color: black;" : "");
     }
 
     private void handleSetTheme() {
