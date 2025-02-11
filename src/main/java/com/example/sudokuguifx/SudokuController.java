@@ -19,19 +19,17 @@ import java.io.*;
 
 public class SudokuController {
 
-    private int[][] sudokuGrid; // 9x9 integer array for Sudoku grid
-    private int [][] solutionGrid; // Solution grid
+    private int[][] sudokuGrid, solutionGrid; // 9x9 integer array for Sudoku grid and solution
 
     private int mistakes; // Count user mistakes
-    private boolean solving = false; // Flag for checking if auto-solve is active
-    private boolean usedSolver = false; // Flag for checking if was solved with auto-solver
+    private boolean solving; // Flag for checking if auto-solve is active
+    private boolean usedSolver; // Flag for checking if was solved with auto-solver
 
     private int difficulty; // The difficulty level passed from StartupController
-    private String difficultyS; // Difficulty as a string
+    private String difficultyS; // Difficulty as string
 
     private Timeline timer; // Top keep track of the timer
     private int timeSeconds; // Track elapsed seconds
-    private boolean isTimerRunning = true; // Timer state
 
     private AtomicInteger tries = new AtomicInteger(3);
     private int hints = 3;
@@ -41,83 +39,72 @@ public class SudokuController {
     @FXML
     private GridPane gridPane;
     @FXML
-    private Label difficultyLabel;
+    private Label difficultyLabel, timerLabel, mistakesLabel;
     @FXML
-    private Label timerLabel;
+    private Button pauseButton, newGameButton, quitButton, solveButton, hintButton;
     @FXML
-    private Label mistakesLabel;
-    @FXML
-    private Button pauseButton;
-    @FXML
-    private Button newGameButton;
-    @FXML
-    private Button quitButton;
-    @FXML
-    private Button solveButton;
-    @FXML
-    private Button hintButton;
-    @FXML
-    private ImageView pauseImage;
-    @FXML
-    private ImageView resumeImage;
+    private ImageView pauseImage, resumeImage;
 
     @FXML
     private void initialize() {
-        Image lockIcon = new Image(getClass().getResourceAsStream("/images/lock-icon.png"));
-        Image hintIcon = new Image(getClass().getResourceAsStream("/images/light-bulb.png"));
-        Image pauseIcon = new Image(getClass().getResourceAsStream("/images/pause-logo.png"));
-        Image resumeIcon = new Image(getClass().getResourceAsStream("/images/resume-logo.png"));
+        loadImages();
+        setFonts();
+    }
 
-        ImageView solveImageView = new ImageView(lockIcon);
-        ImageView hintImageView = new ImageView(hintIcon);
-        this.pauseImage = new ImageView(pauseIcon);
-        this.resumeImage = new ImageView(resumeIcon);
+    private void loadImages() {
+        pauseImage = createImageView("/images/pause-logo.png", 25, 25);
+        resumeImage = createImageView("/images/resume-logo.png", 30, 30);
 
-        solveImageView.setFitWidth(20);
-        solveImageView.setFitHeight(20);
+        solveButton.setGraphic(createImageView("/images/lock-icon.png", 20, 20));
+        hintButton.setGraphic(createImageView("/images/light-bulb.png", 20, 20));
+        pauseButton.setGraphic(pauseImage);
+    }
 
-        hintImageView.setFitWidth(20);
-        hintImageView.setFitHeight(20);
+    private ImageView createImageView(String path, double width, double height) {
+        ImageView imageView = new ImageView(Utils.loadImage(path));
+        imageView.setFitWidth(width);
+        imageView.setFitHeight(height);
+        return imageView;
+    }
 
-        this.pauseImage.setFitWidth(25);
-        this.pauseImage.setFitHeight(25);
-
-        this.resumeImage.setFitWidth(30);
-        this.resumeImage.setFitHeight(30);
-
-        solveButton.setGraphic(solveImageView);
-        hintButton.setGraphic(hintImageView);
-        pauseButton.setGraphic(this.pauseImage);
-
+    private void setFonts() {
         difficultyLabel.setFont(Font.font("",FontWeight.BOLD,30));
         timerLabel.setFont(Font.font("",FontWeight.SEMI_BOLD,20));
         mistakesLabel.setFont(Font.font("",FontWeight.SEMI_BOLD,20));
+
+        solveButton.setFont(Font.font("",FontWeight.NORMAL,15));
+        hintButton.setFont(Font.font("",FontWeight.NORMAL,15));
+        newGameButton.setFont(Font.font("",FontWeight.NORMAL,15));
+        pauseButton.setFont(Font.font("",FontWeight.NORMAL,15));
+        quitButton.setFont(Font.font("",FontWeight.NORMAL,15));
     }
 
     public void setTheme(Scene scene, boolean dark) {
         this.dark = dark;
 
+        String bgColor = dark ? "-fx-background-color: rgb(42,43,42);" : "-fx-background-color: whitesmoke";
+        String textColor = dark ? "-fx-text-fill: white;" : "-fx-text-fill: black";
+        String buttonStyle = dark ? "-fx-background-color: gray;" +
+                " -fx-background-radius: 5; -fx-border-radius: 5; -fx-border-color: black;" : "";
+
         // Style elements by theme
-        scene.getRoot().setStyle(dark ? "-fx-background-color: rgb(42,43,42);" : "-fx-background-color: whitesmoke");
-        difficultyLabel.setStyle(dark ? "-fx-text-fill: white;" : "-fx-text-fill: black");
-        timerLabel.setStyle(dark ? "-fx-text-fill: white;" : "-fx-text-fill: black");
-        mistakesLabel.setStyle(dark ? "-fx-text-fill: white;" : "-fx-text-fill: black");
-        solveButton.setStyle(dark ? "-fx-background-color: gray;" +
-                " -fx-background-radius: 5; -fx-border-radius: 5; -fx-border-color: black;" : "");
-        hintButton.setStyle("-fx-font-size: 15px; " + (dark ? "-fx-background-color: gray;" +
-                " -fx-background-radius: 5; -fx-border-radius: 5; -fx-border-color: black;" : ""));
-        newGameButton.setStyle("-fx-font-size: 15px; " + (dark ? "-fx-background-color: gray;" +
-                " -fx-background-radius: 5; -fx-border-radius: 5; -fx-border-color: black;" : ""));
-        pauseButton.setStyle(dark ? "-fx-background-color: gray;" +
-                " -fx-background-radius: 5; -fx-border-radius: 5; -fx-border-color: black;" : "");
-        quitButton.setStyle("-fx-font-size: 15px; " + (dark ? "-fx-background-color: gray;" +
-                " -fx-background-radius: 5; -fx-border-radius: 5; -fx-border-color: black;" : ""));
+        scene.getRoot().setStyle(bgColor);
+
+        difficultyLabel.setStyle(textColor);
+        timerLabel.setStyle(textColor);
+        mistakesLabel.setStyle(textColor);
+
+        solveButton.setStyle(buttonStyle);
+        hintButton.setStyle(buttonStyle);
+        newGameButton.setStyle(buttonStyle);
+        pauseButton.setStyle(buttonStyle);
+        quitButton.setStyle(buttonStyle);
     }
 
-    // Set the difficulty level
     public void setDifficulty(String difficulty) {
-
         this.difficultyS = difficulty;
+
+        // Set the difficulty level
         this.difficulty = switch (difficulty) {
             case "Easy" -> 45;
             case "Medium" -> 50;
@@ -129,22 +116,24 @@ public class SudokuController {
     }
 
     public void initializeBoard() {
-
         // Create an instance of GenerateBoard with the difficulty level
         GenerateBoard boardGenerator = new GenerateBoard(difficulty);
-        // fill the board
         boardGenerator.fillValues();
-        // get the final board
-        sudokuGrid = boardGenerator.board;
-        solutionGrid = boardGenerator.solution;
-        mistakes = 0;
+
+        // Set game board and solution
+        this.sudokuGrid = boardGenerator.board;
+        this.solutionGrid = boardGenerator.solution;
         populateGrid();
-        startTimer(); // Start the timer when the game starts
+
+        this.mistakes = 0;
+        this.solving = false;
+        this.usedSolver = false;
+
+        startTimer();
     }
 
-    // Method to start the timer
     private void startTimer() {
-        timeSeconds = 0; // Initialize the timer to 0 seconds
+        timeSeconds = 0;
         timerLabel.setText(formatTime(timeSeconds)); // Display initial time
 
         // Create a Timeline to update the timer every second
@@ -154,7 +143,7 @@ public class SudokuController {
         }));
 
         timer.setCycleCount(Timeline.INDEFINITE); // Run indefinitely
-        timer.play(); // Start the timer
+        timer.play();
     }
 
     // Helper method to format time (mm:ss)
@@ -166,22 +155,21 @@ public class SudokuController {
 
     @FXML
     private void toggleTimer() {
-        if (isTimerRunning) {
-            timer.pause();  // Pause the timer
-            pauseButton.setGraphic(this.resumeImage);  // Update button image
-            gridPane.setVisible(false); // Hide the Sudoku grid
-            solveButton.setVisible(false);
-            hintButton.setVisible(false);
-            difficultyLabel.setText("Game Paused"); // Show pause message
+        boolean running = timer.getStatus() == Animation.Status.RUNNING;
+
+        if (running) {
+            timer.pause();
+            difficultyLabel.setText("Game Paused");
+            pauseButton.setGraphic(resumeImage);
         } else {
-            timer.play();  // Resume the timer
-            pauseButton.setGraphic(this.pauseImage);  // Update button text
-            gridPane.setVisible(true); // Show the sudoku grid
-            solveButton.setVisible(true);
-            hintButton.setVisible(true);
+            timer.play();
             difficultyLabel.setText(difficultyS);
+            pauseButton.setGraphic(pauseImage);
         }
-        isTimerRunning = !isTimerRunning;  // Toggle the state
+
+        gridPane.setVisible(!running);
+        solveButton.setVisible(!running);
+        hintButton.setVisible(!running);
     }
 
     private void populateGrid() {
@@ -324,14 +312,7 @@ public class SudokuController {
 
     @FXML
     private void handleExit() {
-        // Get the current stage using the button (or any UI element) and close the application
-        Stage stage = (Stage) pauseButton.getScene().getWindow();
-        stage.close();
-
-        // Ensure all JavaFX processes are stopped
         Platform.exit();
-
-        // Forcefully terminate the JVM
         System.exit(0);
     }
 

@@ -13,6 +13,9 @@ public class SudokuGUI extends Application {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("startup_menu.fxml"));
         Parent root = loader.load();
 
+        // Sudoku logo
+        primaryStage.getIcons().add(Utils.loadImage("/images/sudoku-logo.png"));
+
         // Create the scene and pass to controller
         Scene scene = new Scene(root, 600, 600);
         StartupController controller = loader.getController();
