@@ -1,5 +1,8 @@
 package com.example.sudokuguifx;
 
+import javafx.scene.image.Image;
+import java.io.InputStream;
+
 public class Utils {
 
     private static final int B = 3;
@@ -10,7 +13,7 @@ public class Utils {
         return (int) Math.floor((Math.random()*num+1));
     }
 
-    // returns boolean indicating if safe to add to cell
+    // Returns boolean indicating if safe to add to cell
     public static boolean checkIfSafe(int[][] board, int i, int j, int num) {
 
         return (checkRowAndCol(board,i,j,num) &&
@@ -28,7 +31,7 @@ public class Utils {
         return true;
     }
 
-    // returns boolean indicating if safe to add to row & col
+    // Returns boolean indicating if safe to add to row & col
     private static boolean checkRowAndCol(int[][] board, int row, int col, int num) {
 
         for(int i = 0; i < 9; i++) {
@@ -53,5 +56,15 @@ public class Utils {
     // Returns if box idx is odd or even
     private static boolean evenBox(int row, int col) {
         return ((row/3)*3+(col/3))%2 == 0;
+    }
+
+    // Load image from resources
+    public static Image loadImage(String path) {
+        InputStream stream = Utils.class.getResourceAsStream(path);
+        if (stream == null) {
+            System.err.println("Error: Image not found - " + path);
+            return null; // Handle missing image
+        }
+        return new Image(stream);
     }
 }
