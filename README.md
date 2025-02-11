@@ -1,6 +1,7 @@
 # 🧩 Sudoku Game
 
 A **simple Sudoku game** built with **JavaFX**, featuring a modern GUI with customizable themes.
+
 The executable game can be found in src/main/java/com/example/sudokuguifx/SudokuGUI.java
 
 ## ✨ Features
