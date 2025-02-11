@@ -16,4 +16,5 @@ A **simple Sudoku game** built with **JavaFX**, featuring a modern GUI with cust
 - **Backtracking Algorithm** for Sudoku board generation and brute-force solving.
 
 The executable game can be found in src/main/java/com/example/sudokuguifx/SudokuGUI.java
+
 Enjoy solving Sudoku with an intuitive and polished JavaFX experience! 🚀
