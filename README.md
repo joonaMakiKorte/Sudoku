@@ -15,7 +15,7 @@ A **simple Sudoku game** built with **JavaFX**, featuring a modern GUI with cust
 - **FXML & CSS** for styling and layout.
 - **Backtracking Algorithm** for Sudoku board generation and brute-force solving.
 
-## Getting Started
+## ♨️ Getting Started
 
 ### Prerequisites
 
