@@ -69,4 +69,4 @@ Follow these steps to download and run the application:
 
 By following these instructions, you should be able to successfully run the Sudoku application. If you encounter issues, check the project's dependencies and environment setup.
 
-Enjoy solving Sudoku with an intuitive and polished JavaFX experience! 🚀
+### Enjoy solving Sudoku with an intuitive and polished JavaFX experience! 🚀
