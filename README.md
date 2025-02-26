@@ -97,8 +97,4 @@ The project's structure is organized as follows:
 
 By following these instructions, you should be able to successfully run the Sudoku application. If you encounter issues, check the project's dependencies and environment setup.
 
-## 📄 License
-
-This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
-
 ### Enjoy solving Sudoku with an intuitive and polished JavaFX experience! 🚀
