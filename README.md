@@ -10,6 +10,14 @@ A **simple Sudoku game** built with **JavaFX**, featuring a modern GUI with cust
 - **Hint System** – Players can use up to **three hints per round** to fill a random cell.
 - **Brute-Force Solver** – A built-in **auto-solve** feature that requires entering the password **"1234"** to activate.
 
+### Screenshots
+
+#### Startup Menu
+![Startup Menu](https://imgur.com/vPas5Wf.png)
+
+#### Sudoku UI
+![Sudoku UI](https://imgur.com/KHeSmy0.png)
+
 ## 🖥️ Technology Used
 - **JavaFX** for the graphical user interface.
 - **FXML & CSS** for styling and layout.
