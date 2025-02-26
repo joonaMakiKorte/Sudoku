@@ -15,7 +15,7 @@ A **simple Sudoku game** built with **JavaFX**, featuring a modern GUI with cust
 - **FXML & CSS** for styling and layout.
 - **Backtracking Algorithm** for Sudoku board generation and brute-force solving.
 
-## 🎮 Getting Started
+## 🛠️ Getting Started
 
 ### Prerequisites
 
@@ -57,7 +57,7 @@ Follow these steps to download and run the application:
    ```
    Ensure that the version number in the JAR file name matches the version specified in the `pom.xml` file.
 
-### Usage
+## 🎮 Usage
 
 Upon launching the application:
 
@@ -82,8 +82,8 @@ The project's structure is organized as follows:
     - **Controllers**: Manages user interactions and UI updates.
   - **resources/**
     - **com/example/sudokuguifx/**
-      - **fxml files**: Defines the layout of the views.
-    - **images**: Icons for different UI elements.
+      - **fxml files**: Defines the layouts of the views.
+    - **images**: Icons for the different UI elements.
 
 ## Troubleshooting
 
