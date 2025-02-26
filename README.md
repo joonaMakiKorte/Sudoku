@@ -57,7 +57,57 @@ Follow these steps to download and run the application:
    ```
    Ensure that the version number in the JAR file name matches the version specified in the `pom.xml` file.
 
-### Troubleshooting
+### 🚀 Usage
+
+Upon launching the application:
+
+- **Select Theme**: Choose between Light or Dark mode from the theme menu.
+- **Choose Difficulty**: Select a difficulty level to start a new game.
+- **Gameplay**:
+  - Click on a cell to select it.
+  - Enter a number (1-9) to fill the cell.
+  - Use the "Hint" button to fill a random cell (limited to three hints per game).
+  - The game ends after three incorrect moves.
+- **Auto-Solve**: To activate the brute-force solver, enter the password "1234" when prompted.
+
+## 📁 Project Structure
+
+The project's structure is organized as follows:
+
+Sudoku/
+├── src/
+│   └── main/
+│       ├── java/
+│       │   └── com/example/sudokuguifx/
+│       │       ├── SudokuGUI.java
+│       │       ├── GenerateBoard.java
+│       │       ├── CreateHint.java
+│       │       ├── Solver.java
+│       │       ├── Utils.java
+│       │       ├── StartupController.java
+│       │       ├── SudokuController.java
+│       │       └── PasswordController.java
+│       └── resources/
+│           ├── com/example/sudokuguifx/
+│           │   ├── sudoku.fxml
+│           │   ├── startup_menu.fxml
+│           │   └── password_menu.fxml
+│           └── images/
+│               └── ...
+├── .gitignore
+├── README.md
+├── mvnw
+├── mvnw.cmd
+└── pom.xml
+
+- **SudokuGUI.java**: The main entry point of the application.
+- **GenerateBoard.java**: Handles the generation of Sudoku boards.
+- **Solver.java**: Implements the backtracking algorithm for solving puzzles.
+- **Controllers**: Manages user interactions and UI updates.
+- **fxml files**: Defines the layout of the views.
+- **images**: Icons for different UI elements.
+
+## Troubleshooting
 
 - **JavaFX Compatibility**: If you encounter errors related to JavaFX, make sure your JDK version includes JavaFX (JDK 8) or manually link the JavaFX SDK if using JDK 11+.
 - **Maven Wrapper Execution**: If you have permission issues with `./mvnw`, give it execute permissions:
@@ -68,5 +118,9 @@ Follow these steps to download and run the application:
 - **Windows Users**: Use `mvnw.cmd` instead of `./mvnw` and adjust file paths accordingly.
 
 By following these instructions, you should be able to successfully run the Sudoku application. If you encounter issues, check the project's dependencies and environment setup.
+
+## License
+
+This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
 
 ### Enjoy solving Sudoku with an intuitive and polished JavaFX experience! 🚀
